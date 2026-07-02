@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>أطلس المعارك الإسلامية الكبرى</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parch:#FBF4E4; --parch-2:#F2E8CC; --parch-3:#E8D8A8; --cream:#FFFDF7;
+  --gold:#C5A059; --gold-2:#D9B673; --gold-3:#A8843A; --gold-dark:#7A5C1E;
+  --em:#064E3B; --em2:#065F46; --em3:#10B981; --em-light:#D1FAE5;
+  --cr:#9F1239; --cr2:#BE123C;
+  --ink:#1C1008; --ink2:#3D2B0E; --ink3:#6B4C1E;
+  --muted:#8B7355; --muted2:#A89070;
+  --map-bg:#EEF4F0; --map-bd:#B8D4C4;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--parch);color:var(--ink);min-height:100vh;overflow-x:hidden}
+.site-header{background:linear-gradient(180deg,var(--em) 0%,var(--em2) 100%);box-shadow:0 4px 24px rgba(6,78,59,.25)}
+.hdr-orn{width:100%;height:4px;background:linear-gradient(90deg,transparent,var(--gold-3),var(--gold),var(--gold-2),var(--gold),var(--gold-3),transparent)}
+.hdr-inner{max-width:900px;margin:0 auto;padding:1.8rem 1.5rem 1.5rem;text-align:center}
+.hdr-badge{display:inline-block;background:rgba(197,160,89,.15);border:1px solid rgba(197,160,89,.4);color:var(--gold-2);font-size:.72rem;letter-spacing:.18em;padding:.25em 1em;border-radius:20px;margin-bottom:.9rem;font-weight:600}
+.hdr-title{font-family:'Amiri',serif;font-size:clamp(1.9rem,5.5vw,3rem);font-weight:700;color:var(--parch);line-height:1.25;margin-bottom:.3rem}
+.hdr-title-en{font-family:'Lora',serif;font-style:italic;font-size:clamp(.85rem,2vw,1.05rem);color:var(--gold-2);letter-spacing:.06em;margin-bottom:.8rem;display:block}
+.hdr-div{width:180px;height:1px;margin:.5rem auto .8rem;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.hdr-sub{font-size:.92rem;color:rgba(251,244,228,.75);max-width:520px;margin:0 auto;line-height:1.7}
+.quick-nav{max-width:900px;margin:0 auto;padding:1rem 1.2rem .5rem;display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center}
+.qn-btn{background:var(--em);border:none;color:var(--gold-2);font-family:'Cairo',sans-serif;font-size:.72rem;font-weight:700;padding:.3em .85em;border-radius:20px;cursor:pointer;transition:all .18s;white-space:nowrap;box-shadow:0 2px 8px rgba(6,78,59,.2)}
+.qn-btn:hover{background:var(--em2);transform:translateY(-1px)}
+.voice-picker{max-width:900px;margin:0 auto;padding:0 1.2rem .8rem;display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;align-items:center}
+.vp-label{font-size:.68rem;color:rgba(251,244,228,.55);margin-left:.4rem}
+.vp-chip{background:rgba(197,160,89,.1);border:1.5px solid rgba(197,160,89,.3);color:var(--gold-2);font-family:'Cairo',sans-serif;font-size:.72rem;font-weight:700;padding:.3em .85em;border-radius:20px;cursor:pointer;transition:all .18s;white-space:nowrap;display:flex;align-items:center;gap:4px}
+.vp-chip:hover{border-color:var(--gold)}
+.vp-chip.active{background:var(--gold);color:var(--em);border-color:var(--gold)}
+
+/* ── Language picker (first-visit overlay + persistent toggle) ── */
+#langOverlay{position:fixed;inset:0;z-index:900;background:rgba(10,15,26,.92);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+#langOverlay.open{opacity:1;pointer-events:all}
+.lang-card{background:var(--cream);border-radius:24px;padding:2.2rem 1.8rem;max-width:380px;width:92%;text-align:center;box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.lang-card-icon{font-size:2.6rem;margin-bottom:.6rem}
+.lang-card-title{font-family:'Amiri',serif;font-size:1.3rem;font-weight:700;color:var(--em);margin-bottom:.2rem}
+.lang-card-title-en{font-family:'Lora',serif;font-style:italic;font-size:.85rem;color:var(--muted);margin-bottom:1.4rem;display:block}
+.lang-opt-btn{width:100%;display:flex;align-items:center;gap:.8rem;background:var(--parch-2);border:2px solid var(--parch-3);border-radius:14px;padding:.9rem 1.1rem;margin-bottom:.7rem;cursor:pointer;transition:all .18s;text-align:right;font-family:'Cairo',sans-serif}
+.lang-opt-btn:hover{border-color:var(--gold);background:var(--parch)}
+.lang-opt-flag{font-size:1.6rem;flex-shrink:0}
+.lang-opt-txt{flex:1;text-align:right}
+.lang-opt-txt .lo-main{font-size:1rem;font-weight:800;color:var(--ink)}
+.lang-opt-txt .lo-sub{font-size:.75rem;color:var(--muted);display:block;margin-top:1px}
+
+.lang-toggle-wrap{max-width:900px;margin:0 auto;padding:0 1.2rem .4rem;display:flex;justify-content:center}
+.lang-toggle{display:inline-flex;background:rgba(197,160,89,.1);border:1.5px solid rgba(197,160,89,.3);border-radius:20px;padding:3px;gap:2px}
+.lt-btn{border:none;background:none;color:var(--gold-2);font-family:'Cairo',sans-serif;font-size:.72rem;font-weight:800;padding:.32em 1em;border-radius:18px;cursor:pointer;transition:all .18s}
+.lt-btn.active{background:var(--gold);color:var(--em)}
+.cards-wrap{max-width:780px;margin:0 auto;padding:1.5rem 1.2rem 3rem;display:flex;flex-direction:column;gap:12px}
+.sec-label{text-align:center;padding:.5rem 0;font-size:.75rem;font-weight:800;color:var(--muted);letter-spacing:.15em;display:flex;align-items:center;gap:.8rem}
+.sec-label::before,.sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--parch-3))}
+.sec-label::after{background:linear-gradient(90deg,var(--parch-3),transparent)}
+.intro-card{background:linear-gradient(135deg,var(--em) 0%,#063529 100%);border-radius:20px;padding:1.4rem 1.3rem;display:flex;align-items:center;gap:14px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 6px 28px rgba(6,78,59,.35);border:1.5px solid rgba(197,160,89,.35);transition:transform .2s,box-shadow .2s}
+.intro-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(6,78,59,.4)}
+.intro-card::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='20,2 23,13 35,13 25,19 28,30 20,24 12,30 15,19 5,13 17,13' fill='%23C5A059' fill-opacity='0.07'/%3E%3C/svg%3E") 0 0/40px 40px}
+.ic-icon{flex-shrink:0;width:64px;height:64px;background:rgba(197,160,89,.15);border:1.5px solid rgba(197,160,89,.4);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;z-index:1}
+.ic-body{flex:1;min-width:0;position:relative;z-index:1}
+.ic-badge{font-size:.68rem;font-weight:800;letter-spacing:.12em;color:var(--gold-2);margin-bottom:.3rem;background:rgba(197,160,89,.12);border-radius:10px;display:inline-block;padding:.1em .7em}
+.ic-title{font-size:clamp(1.05rem,3vw,1.25rem);font-weight:800;color:var(--parch);margin-bottom:.25rem;line-height:1.3}
+.ic-title-en{font-family:'Lora',serif;font-style:italic;font-size:.78rem;color:var(--gold-2)}
+.ic-sub{font-size:.83rem;color:rgba(251,244,228,.7);margin-top:.35rem;line-height:1.5}
+.ic-cta{display:inline-flex;align-items:center;gap:.5rem;margin-top:.7rem;background:var(--gold);color:var(--em);font-weight:800;font-size:.82rem;padding:.45em 1.1em;border-radius:20px;border:none;cursor:pointer;transition:all .2s;font-family:'Cairo',sans-serif}
+.ic-cta:hover{background:var(--gold-2);transform:translateY(-1px)}
+.battle-card{background:white;border-radius:18px;display:flex;align-items:stretch;overflow:hidden;cursor:pointer;border:1.5px solid rgba(197,160,89,.2);box-shadow:0 4px 16px rgba(28,16,8,.08);transition:transform .22s cubic-bezier(.34,1.56,.64,1),box-shadow .22s,border-color .22s;position:relative}
+.battle-card:hover{transform:translateY(-4px);box-shadow:0 14px 40px rgba(28,16,8,.15);border-color:var(--gold)}
+.card-stripe{width:6px;flex-shrink:0}
+.card-minimap{flex-shrink:0;width:90px;min-height:80px;display:flex;align-items:center;justify-content:center;background:var(--map-bg);overflow:hidden}
+.card-minimap svg{width:90px;height:80px;display:block}
+.card-body{flex:1;min-width:0;padding:.85rem 1rem .85rem .8rem}
+.card-num{font-size:.62rem;font-weight:800;letter-spacing:.15em;color:var(--muted);margin-bottom:.2rem}
+.card-name{font-family:'Amiri',serif;font-size:1.1rem;font-weight:700;color:var(--ink);line-height:1.3}
+.card-name-en{font-family:'Lora',serif;font-style:italic;font-size:.72rem;color:var(--muted);margin-bottom:.4rem;display:block}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.35rem}
+.card-tag{display:inline-flex;align-items:center;gap:3px;font-size:.68rem;color:var(--ink3);background:var(--parch-2);padding:.15em .6em;border-radius:999px;font-weight:600}
+.card-excerpt{font-size:.8rem;color:var(--muted);line-height:1.55}
+.card-arr{flex-shrink:0;display:flex;align-items:center;padding:0 .9rem 0 .7rem;color:var(--gold-3);font-size:1.2rem;opacity:.6}
+.card-listen{position:absolute;bottom:.7rem;left:1rem;background:none;border:1px solid rgba(197,160,89,.4);color:var(--gold-3);font-family:'Cairo',sans-serif;font-size:.68rem;padding:.2em .65em;border-radius:999px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:3px}
+.card-listen:hover{background:var(--gold);color:var(--em);border-color:var(--gold)}
+#modal-ov{position:fixed;inset:0;z-index:500;background:rgba(10,15,26,.88);backdrop-filter:blur(8px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+#modal-ov.open{opacity:1;pointer-events:all}
+#modal{background:var(--cream);border-radius:24px 24px 0 0;max-width:780px;width:100%;max-height:92vh;overflow-y:auto;transform:translateY(60px);transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+#modal-ov.open #modal{transform:translateY(0)}
+#modal::-webkit-scrollbar{width:4px}
+#modal::-webkit-scrollbar-thumb{background:var(--parch-3);border-radius:2px}
+.modal-handle{width:44px;height:5px;background:var(--parch-3);border-radius:3px;margin:10px auto 0}
+.modal-hdr{background:linear-gradient(160deg,var(--em) 0%,#063529 100%);padding:1.4rem 1.5rem 1.2rem;position:relative;overflow:hidden}
+.modal-hdr::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='20,2 23,13 35,13 25,19 28,30 20,24 12,30 15,19 5,13 17,13' fill='%23C5A059' fill-opacity='0.08'/%3E%3C/svg%3E") 0 0/40px 40px}
+.modal-close{position:absolute;top:1rem;left:1.2rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:white;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all .18s;z-index:2}
+.modal-close:hover{background:rgba(255,255,255,.22)}
+.modal-epoch{display:inline-block;position:relative;z-index:1;background:rgba(197,160,89,.18);border:1px solid rgba(197,160,89,.45);color:var(--gold-2);font-size:.7rem;font-weight:800;padding:.2em .9em;border-radius:20px;margin-bottom:.7rem;letter-spacing:.05em}
+.modal-title{font-family:'Amiri',serif;font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;color:var(--parch);position:relative;z-index:1;line-height:1.25}
+.modal-title-en{font-family:'Lora',serif;font-style:italic;font-size:.85rem;color:var(--gold-2);display:block;margin-top:.2rem;position:relative;z-index:1}
+.modal-body{padding:1.5rem 1.5rem 2.5rem}
+.narr-btn{width:100%;display:flex;align-items:center;gap:1rem;background:linear-gradient(135deg,var(--em-light),#DCFCE7);border:2px solid var(--em3);border-radius:14px;padding:1rem 1.2rem;cursor:pointer;margin-bottom:1.5rem;transition:all .2s;text-align:right;font-family:'Cairo',sans-serif}
+.narr-btn:hover{background:linear-gradient(135deg,#BBF7D0,var(--em-light));transform:translateY(-1px)}
+.narr-icon{font-size:1.8rem;flex-shrink:0}
+.narr-txt .nt-title{font-size:.95rem;font-weight:800;color:var(--em)}
+.narr-txt .nt-sub{font-size:.75rem;color:var(--muted);display:block;margin-top:2px}
+.audio-wave{display:none;align-items:center;gap:3px;height:18px}
+.audio-wave.playing{display:flex}
+.audio-wave span{display:block;width:3px;border-radius:2px;background:var(--em);animation:wave 1s ease-in-out infinite}
+.audio-wave span:nth-child(2){animation-delay:.1s}
+.audio-wave span:nth-child(3){animation-delay:.2s}
+.audio-wave span:nth-child(4){animation-delay:.3s}
+.audio-wave span:nth-child(5){animation-delay:.4s}
+@keyframes wave{0%,100%{height:4px}50%{height:16px}}
+.map-sec{background:var(--map-bg);border:1.5px solid var(--map-bd);border-radius:16px;overflow:hidden;margin-bottom:1.5rem}
+.map-title-bar{background:white;border-bottom:1px solid var(--map-bd);padding:.6rem 1rem;font-size:.78rem;font-weight:800;color:var(--em);display:flex;align-items:center;gap:.5rem}
+.map-legend{display:flex;flex-wrap:wrap;gap:.5rem;padding:.6rem 1rem;background:white;border-top:1px solid var(--map-bd)}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:.65rem;color:var(--muted)}
+.leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.leg-line{width:14px;height:3px;border-radius:2px;flex-shrink:0}
+.info-sec{margin-bottom:1.4rem}
+.info-lbl{display:flex;align-items:center;gap:.6rem;font-size:.9rem;font-weight:800;color:var(--em);margin-bottom:.7rem;padding-bottom:.4rem;border-bottom:2px solid var(--em-light)}
+.info-lbl-en{font-family:'Lora',serif;font-style:italic;font-size:.7rem;color:var(--muted);margin-right:auto}
+.info-ar{font-family:'Amiri',serif;font-size:1.02rem;line-height:1.9;color:var(--ink);margin-bottom:.6rem}
+.info-en{font-family:'Lora',serif;font-size:.85rem;line-height:1.65;color:var(--muted);direction:ltr;text-align:left;border-top:1px solid var(--parch-3);padding-top:.6rem;font-style:italic}
+.narr-quote{background:linear-gradient(135deg,var(--parch-2),var(--parch));border:1.5px solid var(--parch-3);border-right:5px solid var(--gold);border-radius:12px;padding:1.1rem 1.2rem;margin-bottom:1.4rem;position:relative}
+.narr-quote::before{content:'🎙';position:absolute;top:-.7rem;right:1rem;background:var(--cream);padding:0 .3rem;font-size:1.1rem}
+.nq-ar{font-family:'Amiri',serif;font-size:1.05rem;line-height:1.9;color:var(--ink);font-style:italic;margin-bottom:.5rem}
+.nq-en{font-family:'Lora',serif;font-size:.82rem;line-height:1.6;color:var(--muted);direction:ltr;text-align:left;font-style:italic}
+.fig-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:.5rem}
+.fig-chip{background:var(--parch-2);border:1px solid var(--parch-3);color:var(--ink2);font-size:.82rem;font-weight:700;padding:.25em .9em;border-radius:999px}
+.lessons-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.5rem}
+.lesson-item{background:linear-gradient(135deg,var(--parch),white);border:1.5px solid var(--parch-3);border-right:3px solid var(--gold);border-radius:10px;padding:.7rem .8rem;font-size:.83rem;line-height:1.6;color:var(--ink2)}
+.modal-nav{display:flex;gap:.8rem;margin-top:1.5rem;flex-wrap:wrap}
+.modal-nav-btn{flex:1;min-width:140px;background:var(--parch-2);border:1.5px solid var(--parch-3);color:var(--em);font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:800;padding:.7em 1em;border-radius:12px;cursor:pointer;transition:all .18s}
+.modal-nav-btn:hover{background:var(--em);color:var(--parch);border-color:var(--em)}
+footer{background:var(--em);color:rgba(251,244,228,.6);text-align:center;padding:2rem;font-size:.8rem}
+.fo-orn{font-family:'Amiri',serif;font-size:1.4rem;color:var(--gold-3);display:block;margin-bottom:.4rem}
+@media(max-width:600px){.card-minimap{width:70px}.card-minimap svg{width:70px;height:65px}.lessons-grid{grid-template-columns:1fr}.modal-body{padding:1.2rem 1rem 2rem}.modal-hdr{padding:1.1rem 1rem 1rem}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="hdr-orn"></div>
+  <div class="hdr-inner">
+    <div class="hdr-badge">✦ موسوعة عسكرية إسلامية · Islamic Military Encyclopedia ✦</div>
+    <h1 class="hdr-title">أَطْلَسُ الْمَعَارِكِ الإِسْلَامِيَّةِ الْكُبْرَى</h1>
+    <span class="hdr-title-en">The Great Islamic Battles Atlas</span>
+    <div class="hdr-div"></div>
+    <p class="hdr-sub">خَمْسَةَ عَشَرَ مَعْرَكَةً فَارِقَةً غَيَّرَتِ التَّارِيخَ — بِخَرَائِطَ تَكْتِيكِيَّةٍ وَصَوْتِ رَاوٍ</p>
+  </div>
+</header>
+
+<!-- LANGUAGE PICKER — shown on first visit -->
+<div id="langOverlay">
+  <div class="lang-card">
+    <div class="lang-card-icon">🗣️</div>
+    <div class="lang-card-title">اِخْتَرْ لُغَةَ الرَّاوِي</div>
+    <span class="lang-card-title-en">Choose the Narrator's Language</span>
+    <button class="lang-opt-btn" onclick="setNarrationLang('ar')">
+      <span class="lang-opt-flag">🇸🇦</span>
+      <span class="lang-opt-txt"><span class="lo-main">العَرَبِيَّةُ</span><span class="lo-sub">Listen in Arabic</span></span>
+    </button>
+    <button class="lang-opt-btn" onclick="setNarrationLang('en')">
+      <span class="lang-opt-flag">🇬🇧</span>
+      <span class="lang-opt-txt"><span class="lo-main">English</span><span class="lo-sub">الاسْتِمَاعُ بِالْإِنْجِلِيزِيَّةِ</span></span>
+    </button>
+  </div>
+</div>
+
+<div class="lang-toggle-wrap">
+  <div class="lang-toggle">
+    <button class="lt-btn" id="ltAr" onclick="setNarrationLang('ar')">🇸🇦 العَرَبِيَّةُ</button>
+    <button class="lt-btn" id="ltEn" onclick="setNarrationLang('en')">🇬🇧 English</button>
+  </div>
+</div>
+
+<nav class="quick-nav" id="quickNav"></nav>
+<div class="voice-picker" id="voicePicker"></div>
+<div class="cards-wrap">
+  <div class="intro-card" onclick="speakIntro()">
+    <div class="ic-icon">📜</div>
+    <div class="ic-body">
+      <div class="ic-badge">✦ مُقَدِّمَةُ الْمَوْسُوعَةِ · Encyclopedia Intro ✦</div>
+      <div class="ic-title">لِمَاذَا نَدْرُسُ مَعَارِكَ الإِسْلَامِ؟</div>
+      <div class="ic-title-en">Why Study the Great Battles of Islam?</div>
+      <div class="ic-sub">خَمْسَةَ عَشَرَ مَعْرَكَةً صَاغَتْ مَسَارَ الْحَضَارَةِ — مِنْ بَدْرٍ إِلَى الْقُسْطَنْطِينِيَّةِ</div>
+      <button class="ic-cta" onclick="event.stopPropagation();speakIntro()">
+        🎙️ اِسْتَمِعْ إِلَى الرَّاوِي
+        <div class="audio-wave" id="introWave"><span></span><span></span><span></span><span></span><span></span></div>
+      </button>
+    </div>
+  </div>
+  <div class="sec-label">الْمَعَارِكُ الْخَمْسَةَ عَشَرَ · THE FIFTEEN GREAT BATTLES</div>
+  <div id="battlesList"></div>
+</div>
+<footer><span class="fo-orn">۞ ✦ ۞</span>أَطْلَسُ الْمَعَارِكِ الإِسْلَامِيَّةِ الْكُبْرَى · مُرَتَّبٌ تَرْتِيبًا زَمَنِيًّا</footer>
+<div id="modal-ov" onclick="closeModal(event)">
+  <div id="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-hdr">
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <div id="mEpoch" class="modal-epoch"></div>
+      <h2 id="mTitle" class="modal-title"></h2>
+      <span id="mTitleEn" class="modal-title-en"></span>
+    </div>
+    <div class="modal-body" id="mBody"></div>
+  </div>
+</div>
+<script>
+const D=`<defs><marker id="aG" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#065F46"/></marker><marker id="aR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9F1239"/></marker><marker id="aM" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#D97706"/></marker></defs>`;
+const MF={
+1:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#F5F0E8"/><ellipse cx="250" cy="270" rx="210" ry="55" fill="#E8D59A" opacity=".4"/><path d="M0,305 Q120,275 240,295 Q360,268 500,282 L500,340 L0,340Z" fill="#D4B866" opacity=".28"/><ellipse cx="120" cy="62" rx="75" ry="32" fill="#C8B89A" opacity=".6"/><ellipse cx="380" cy="57" rx="65" ry="28" fill="#C8B89A" opacity=".6"/><circle cx="200" cy="162" r="24" fill="#DBEAFE" stroke="#1E40AF" stroke-width="2"/><text x="200" y="166" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#1E40AF" font-weight="700">آبَارُ بَدْرٍ</text><circle cx="228" cy="155" r="5" fill="#1E40AF" stroke="white" stroke-width="1.5"/><circle cx="214" cy="170" r="5" fill="#1E40AF" stroke="white" stroke-width="1.5"/><circle cx="185" cy="168" r="5" fill="#1E40AF" stroke="white" stroke-width="1.5"/><rect x="130" y="42" width="240" height="50" rx="8" fill="#9F1239" opacity=".12" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="64" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#9F1239" font-weight="800">جَيْشُ قُرَيْشٍ — ١,٠٠٠</text><text x="250" y="81" text-anchor="middle" font-family="Lora,serif" font-size="9" fill="#9F1239" font-style="italic">Quraysh Army — 1,000</text><line x1="250" y1="94" x2="250" y2="140" stroke="#9F1239" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#aR)"/><line x1="195" y1="94" x2="190" y2="135" stroke="#9F1239" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#aR)"/><line x1="305" y1="94" x2="308" y2="135" stroke="#9F1239" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#aR)"/><path d="M222,150 L155,132" stroke="#1E40AF" stroke-width="1.5" stroke-dasharray="3,2"/><rect x="65" y="122" width="88" height="20" rx="4" fill="#1E40AF" opacity=".9"/><text x="109" y="135" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="white" font-weight="700">سَيْطَرَةٌ عَلَى الْمَاءِ ◄</text><rect x="120" y="245" width="260" height="52" rx="8" fill="#065F46" opacity=".1" stroke="#065F46" stroke-width="1.5"/><text x="250" y="267" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#065F46" font-weight="800">جَيْشُ الْمُسْلِمِينَ — ٣١٣</text><text x="250" y="284" text-anchor="middle" font-family="Lora,serif" font-size="9" fill="#065F46" font-style="italic">Muslim Army — 313</text><line x1="250" y1="242" x2="250" y2="202" stroke="#065F46" stroke-width="2" marker-end="url(#aG)"/><line x1="30" y1="195" x2="470" y2="195" stroke="#C5A059" stroke-width="1.5" stroke-dasharray="6,4" opacity=".6"/><rect x="180" y="186" width="140" height="18" rx="9" fill="#C5A059" opacity=".12"/><text x="250" y="198" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9.5" fill="#7A5C1E" font-weight="800">خَطُّ الْمُوَاجَهَةِ</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 بَدْرٌ ٢ هـ / 624 CE</text></svg>`,
+2:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EFF5F0"/><path d="M0,0 L500,0 L500,185 Q350,120 250,135 Q150,148 0,105Z" fill="#B8C4A8" opacity=".42"/><path d="M60,0 Q180,82 250,98 Q320,112 440,62 L500,42 L500,0 L0,0Z" fill="#9FAF8A" opacity=".32"/><text x="250" y="46" text-anchor="middle" font-family="Amiri,serif" font-size="14" fill="#4B5563" font-weight="700">جَبَلُ أُحُدٍ / Mount Uhud</text><ellipse cx="88" cy="183" rx="44" ry="28" fill="#A89070" opacity=".55"/><text x="88" y="180" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="white" font-weight="800">جَبَلُ الرُّمَاةِ</text><rect x="128" y="158" width="244" height="50" rx="8" fill="#065F46" opacity=".1" stroke="#065F46" stroke-width="1.5"/><text x="250" y="180" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#065F46" font-weight="800">الْمُسْلِمُونَ — ٧٠٠</text><text x="250" y="196" text-anchor="middle" font-family="Lora,serif" font-size="9" fill="#065F46" font-style="italic">Muslims — 700</text><rect x="95" y="255" width="310" height="50" rx="8" fill="#9F1239" opacity=".1" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="277" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#9F1239" font-weight="800">قُرَيْشٌ — ٣,٠٠٠</text><path d="M420,248 Q452,205 442,168 Q432,138 332,158" stroke="#9F1239" stroke-width="2.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aR)"/><rect x="396" y="190" width="98" height="36" rx="6" fill="#9F1239" opacity=".9"/><text x="445" y="206" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="white" font-weight="800">خَالِدٌ يَلْتَفُّ!</text><text x="445" y="220" text-anchor="middle" font-family="Lora,serif" font-size="7.5" fill="white" font-style="italic">Khalid flanks!</text><rect x="98" y="136" width="104" height="28" rx="5" fill="#D97706" opacity=".9"/><text x="150" y="148" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="white" font-weight="800">الرُّمَاةُ يَنْزِلُونَ!</text><text x="150" y="160" text-anchor="middle" font-family="Lora,serif" font-size="7" fill="white" font-style="italic">Archers leave post!</text><circle cx="133" cy="166" r="10" fill="#D97706" opacity=".3" stroke="#D97706" stroke-width="2"/><text x="133" y="170" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10" fill="#D97706" font-weight="900">✖</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 أُحُدٌ ٣ هـ / 625 CE</text></svg>`,
+3:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EEF4F0"/><rect x="158" y="185" width="184" height="122" rx="10" fill="#FBF4E4" stroke="#C5A059" stroke-width="2"/><text x="250" y="240" text-anchor="middle" font-family="Amiri,serif" font-size="13" fill="#7A5C1E" font-weight="700">الْمَدِينَةُ الْمُنَوَّرَةُ</text><text x="250" y="258" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#A89070">الْمُسْلِمُونَ ٣,٠٠٠</text><path d="M28,152 Q250,142 472,152" stroke="#1E40AF" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M28,152 Q250,142 472,152" stroke="#3B82F6" stroke-width="4" fill="none" opacity=".4"/><rect x="148" y="133" width="204" height="22" rx="11" fill="#1E40AF" opacity=".9"/><text x="250" y="147" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9.5" fill="white" font-weight="800">الْخَنْدَقُ — بِمَشُورَةِ سَلْمَانَ الْفَارِسِيِّ</text><ellipse cx="58" cy="200" rx="44" ry="88" fill="#9FAF8A" opacity=".38"/><text x="58" y="196" text-anchor="middle" font-family="Cairo,sans-serif" font-size="7.5" fill="#4B5563">حَرَّةُ وَاقِمٍ</text><ellipse cx="442" cy="200" rx="44" ry="88" fill="#9FAF8A" opacity=".38"/><text x="442" y="196" text-anchor="middle" font-family="Cairo,sans-serif" font-size="7.5" fill="#4B5563">حَرَّةُ الْوَبَرَةِ</text><rect x="78" y="28" width="344" height="80" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="56" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#9F1239" font-weight="800">الْأَحْزَابُ — ١٠,٠٠٠ مُقَاتِلٍ</text><text x="250" y="73" text-anchor="middle" font-family="Lora,serif" font-size="9" fill="#9F1239" font-style="italic">The Confederates — 10,000 Warriors</text><line x1="200" y1="110" x2="200" y2="143" stroke="#9F1239" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#aR)"/><line x1="250" y1="110" x2="250" y2="143" stroke="#9F1239" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#aR)"/><line x1="300" y1="110" x2="300" y2="143" stroke="#9F1239" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#aR)"/><text x="200" y="155" text-anchor="middle" font-size="12" fill="#D97706">✖</text><text x="250" y="155" text-anchor="middle" font-size="14" fill="#D97706">✖</text><text x="300" y="155" text-anchor="middle" font-size="12" fill="#D97706">✖</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 الْخَنْدَقُ ٥ هـ / 627 CE</text></svg>`,
+4:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#F0F4EE"/><ellipse cx="250" cy="172" rx="178" ry="118" fill="#D1E8D4" opacity=".45"/><rect x="56" y="78" width="80" height="68" rx="6" fill="#B8C4A8" stroke="#6B7280" stroke-width="1.5"/><text x="96" y="105" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#374151" font-weight="700">حِصْنُ نَاعِمٍ</text><text x="96" y="120" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="#6B7280">✖ سَقَطَ</text><rect x="198" y="54" width="90" height="68" rx="6" fill="#B8C4A8" stroke="#6B7280" stroke-width="1.5"/><text x="243" y="84" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#374151" font-weight="700">حِصْنُ الصَّعْبِ</text><text x="243" y="99" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="#6B7280">✖ سَقَطَ</text><rect x="348" y="63" width="102" height="80" rx="6" fill="#9F1239" opacity=".14" stroke="#9F1239" stroke-width="2"/><text x="399" y="93" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10" fill="#9F1239" font-weight="800">حِصْنُ الْقَمُوصِ</text><text x="399" y="109" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="#9F1239">الْمَعْقِلُ الرَّئِيسِيُّ</text><rect x="56" y="230" width="378" height="55" rx="10" fill="#065F46" opacity=".09" stroke="#065F46" stroke-width="1.5"/><text x="245" y="254" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#065F46" font-weight="800">جَيْشُ الْمُسْلِمِينَ — عَلِيُّ بْنُ أَبِي طَالِبٍ</text><line x1="118" y1="226" x2="118" y2="150" stroke="#065F46" stroke-width="2" marker-end="url(#aG)"/><line x1="243" y1="226" x2="243" y2="126" stroke="#065F46" stroke-width="2" marker-end="url(#aG)"/><line x1="399" y1="226" x2="399" y2="146" stroke="#065F46" stroke-width="2.5" marker-end="url(#aG)"/><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 خَيْبَرُ ٧ هـ / 628 CE</text></svg>`,
+5:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EEF3F0"/><path d="M0,205 Q100,185 200,198 Q300,212 400,188 Q452,178 500,192 L500,340 L0,340Z" fill="#D4C49A" opacity=".28"/><rect x="58" y="24" width="384" height="80" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="52" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#9F1239" font-weight="800">الرُّومُ + الْغَسَّاسِنَةُ — ٢٠٠,٠٠٠</text><text x="250" y="69" text-anchor="middle" font-family="Lora,serif" font-size="9" fill="#9F1239" font-style="italic">Byzantines + Ghassanids — 200,000</text><path d="M118,242 Q78,202 98,132 Q113,82 178,114" stroke="#D97706" stroke-width="2.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aM)"/><path d="M382,242 Q422,202 402,132 Q387,82 322,114" stroke="#D97706" stroke-width="2.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aM)"/><rect x="168" y="192" width="164" height="35" rx="8" fill="#D97706" opacity=".9"/><text x="250" y="208" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9.5" fill="white" font-weight="800">خَالِدٌ يُعِيدُ التَّرْتِيبَ لَيْلًا!</text><text x="250" y="222" text-anchor="middle" font-family="Lora,serif" font-size="8" fill="white" font-style="italic">Khalid reshuffles flanks at night!</text><rect x="128" y="262" width="244" height="50" rx="8" fill="#065F46" opacity=".09" stroke="#065F46" stroke-width="1.5"/><text x="250" y="283" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#065F46" font-weight="800">خَالِدُ بْنُ الْوَلِيدِ — ٣,٠٠٠</text><rect x="183" y="152" width="134" height="22" rx="6" fill="#065F46" opacity=".85"/><text x="250" y="166" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="white" font-weight="700">تَرَاجُعٌ نِظَامِيٌّ آمِنٌ</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 مُؤْتَةُ ٨ هـ / 629 CE</text></svg>`,
+6:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EFF4F1"/><path d="M0,0 L132,0 Q102,82 112,172 Q122,244 82,340 L0,340Z" fill="#9FAF8A" opacity=".44"/><path d="M500,0 L368,0 Q398,82 388,172 Q378,244 418,340 L500,340Z" fill="#9FAF8A" opacity=".44"/><text x="65" y="100" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#4B5563" font-weight="700">جِبَالٌ</text><text x="435" y="100" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#4B5563" font-weight="700">جِبَالٌ</text><text x="65" y="162" text-anchor="middle" font-size="18" fill="#9F1239" opacity=".8">⬇</text><text x="435" y="162" text-anchor="middle" font-size="18" fill="#9F1239" opacity=".8">⬇</text><rect x="24" y="130" width="82" height="26" rx="5" fill="#9F1239" opacity=".85"/><text x="65" y="146" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="white" font-weight="700">كَمِينُ هَوَازِنَ</text><rect x="394" y="130" width="82" height="26" rx="5" fill="#9F1239" opacity=".85"/><text x="435" y="146" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="white" font-weight="700">كَمِينُ هَوَازِنَ</text><circle cx="250" cy="186" r="54" fill="#D97706" opacity=".07" stroke="#D97706" stroke-width="1.5" stroke-dasharray="4,3"/><text x="250" y="190" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#D97706" font-weight="700">تَبَعْثُرٌ مَبْدَئِيٌّ / Initial Scatter</text><circle cx="250" cy="232" r="18" fill="#065F46" opacity=".9"/><text x="250" y="236" text-anchor="middle" font-size="15">ﷺ</text><rect x="174" y="257" width="152" height="30" rx="8" fill="#065F46" opacity=".9"/><text x="250" y="271" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="white" font-weight="800">ثَبَتَ النَّبِيُّ ﷺ!</text><line x1="200" y1="247" x2="132" y2="188" stroke="#065F46" stroke-width="2.5" marker-end="url(#aG)"/><line x1="300" y1="247" x2="368" y2="188" stroke="#065F46" stroke-width="2.5" marker-end="url(#aG)"/><rect x="174" y="296" width="152" height="26" rx="6" fill="#C5A059" opacity=".9"/><text x="250" y="312" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#1C1008" font-weight="800">هُجُومٌ مُضَادٌّ كَاسِحٌ!</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 حُنَيْنٌ ٨ هـ / 630 CE</text></svg>`,
+7:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#F5F0E8"/><path d="M50,282 Q150,262 250,257 Q350,252 442,237" stroke="#C5A059" stroke-width="3" fill="none" stroke-dasharray="8,4"/><ellipse cx="120" cy="292" rx="58" ry="18" fill="#D4B866" opacity=".38"/><rect x="26" y="24" width="448" height="80" rx="10" fill="#9F1239" opacity=".07" stroke="#9F1239" stroke-width="1.5" stroke-dasharray="6,4"/><text x="250" y="52" text-anchor="middle" font-family="Cairo,sans-serif" font-size="12" fill="#9F1239" font-weight="800">حُدُودُ الرُّومِ الْبِيزَنْطِيِّينَ</text><text x="250" y="70" text-anchor="middle" font-family="Lora,serif" font-size="9.5" fill="#9F1239" font-style="italic">Byzantine Roman Border</text><path d="M250,106 Q300,118 382,113 Q452,108 492,62" stroke="#9F1239" stroke-width="2" fill="none" stroke-dasharray="4,3" marker-end="url(#aR)"/><rect x="342" y="98" width="114" height="30" rx="6" fill="#9F1239" opacity=".85"/><text x="399" y="113" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="white" font-weight="800">يَنْسَحِبُونَ رُعْبًا!</text><rect x="183" y="128" width="134" height="32" rx="8" fill="#D97706" opacity=".9"/><text x="250" y="142" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="white" font-weight="800">لَا صِدَامَ مُبَاشِرَ</text><text x="250" y="155" text-anchor="middle" font-family="Lora,serif" font-size="7.5" fill="white" font-style="italic">No direct confrontation</text><circle cx="50" cy="282" r="20" fill="#065F46" opacity=".85"/><text x="50" y="285" text-anchor="middle" font-family="Cairo,sans-serif" font-size="6.5" fill="white">الْمَدِينَةُ</text><rect x="400" y="208" width="92" height="58" rx="8" fill="#065F46" opacity=".1" stroke="#065F46" stroke-width="1.5"/><text x="446" y="230" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10" fill="#065F46" font-weight="800">تَبُوكُ</text><text x="446" y="250" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="#065F46">٣٠,٠٠٠</text><line x1="78" y1="270" x2="396" y2="234" stroke="#065F46" stroke-width="2.5" marker-end="url(#aG)"/><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 تَبُوكُ ٩ هـ / 630 CE</text></svg>`,
+8:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EFF4F1"/><path d="M0,278 Q120,263 250,268 Q380,273 500,256" stroke="#1E40AF" stroke-width="8" fill="none" opacity=".7"/><path d="M0,283 Q250,293 500,276 L500,340 L0,340Z" fill="#6B7280" opacity=".22"/><text x="80" y="264" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#1E40AF" font-weight="700">نَهْرُ الْيَرْمُوكِ</text><text x="250" y="318" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#374151" font-weight="700">وَادِي الرَّقَّادِ السَّحِيقُ — Deep Ravine</text><rect x="38" y="24" width="424" height="80" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="52" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#9F1239" font-weight="800">الرُّومُ الْبِيزَنْطِيُّونَ — ٢٠٠,٠٠٠</text><text x="250" y="69" text-anchor="middle" font-family="Lora,serif" font-size="9" fill="#9F1239" font-style="italic">Byzantines — 200,000</text><rect x="38" y="153" width="424" height="70" rx="10" fill="#065F46" opacity=".07" stroke="#065F46" stroke-width="1.5"/><text x="250" y="178" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10" fill="#065F46" font-weight="800">نِظَامُ الْكَرَادِيسِ — خَالِدُ بْنُ الْوَلِيدِ</text><rect x="50" y="183" width="62" height="30" rx="5" fill="#065F46" opacity=".85"/><text x="81" y="201" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="white" font-weight="700">ك١</text><rect x="120" y="183" width="62" height="30" rx="5" fill="#065F46" opacity=".85"/><text x="151" y="201" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="white" font-weight="700">ك٢</text><rect x="190" y="183" width="62" height="30" rx="5" fill="#065F46" opacity=".85"/><text x="221" y="201" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="white" font-weight="700">ك٣</text><rect x="260" y="183" width="62" height="30" rx="5" fill="#065F46" opacity=".85"/><text x="291" y="201" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="white" font-weight="700">ك٤</text><rect x="330" y="183" width="62" height="30" rx="5" fill="#065F46" opacity=".85"/><text x="361" y="201" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="white" font-weight="700">ك٥</text><line x1="250" y1="106" x2="250" y2="150" stroke="#9F1239" stroke-width="2.5" marker-end="url(#aR)"/><line x1="250" y1="226" x2="250" y2="260" stroke="#065F46" stroke-width="2.5" marker-end="url(#aG)"/><line x1="148" y1="226" x2="138" y2="260" stroke="#065F46" stroke-width="2" marker-end="url(#aG)"/><line x1="362" y1="226" x2="372" y2="260" stroke="#065F46" stroke-width="2" marker-end="url(#aG)"/><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 الْيَرْمُوكُ ١٣ هـ / 634 CE</text></svg>`,
+9:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#F0F4EF"/><rect x="38" y="24" width="424" height="100" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="52" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#9F1239" font-weight="800">الْفُرْسُ السَّاسَانِيُّونَ — رُسْتُمُ</text><text x="128" y="100" text-anchor="middle" font-size="22">🐘</text><text x="250" y="100" text-anchor="middle" font-size="22">🐘</text><text x="372" y="100" text-anchor="middle" font-size="22">🐘</text><circle cx="128" cy="100" r="18" fill="none" stroke="#D97706" stroke-width="2.5" stroke-dasharray="4,2"/><text x="128" y="104" text-anchor="middle" font-size="10" fill="#D97706" font-weight="900">✖</text><circle cx="250" cy="100" r="18" fill="none" stroke="#D97706" stroke-width="2.5" stroke-dasharray="4,2"/><text x="250" y="104" text-anchor="middle" font-size="10" fill="#D97706" font-weight="900">✖</text><circle cx="372" cy="100" r="18" fill="none" stroke="#D97706" stroke-width="2.5" stroke-dasharray="4,2"/><text x="372" y="104" text-anchor="middle" font-size="10" fill="#D97706" font-weight="900">✖</text><rect x="138" y="118" width="224" height="26" rx="6" fill="#D97706" opacity=".9"/><text x="250" y="134" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="white" font-weight="800">فَقْءُ الْعُيُونِ + قَطْعُ الْحِبَالِ!</text><rect x="78" y="218" width="344" height="60" rx="10" fill="#065F46" opacity=".09" stroke="#065F46" stroke-width="1.5"/><text x="250" y="243" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#065F46" font-weight="800">سَعْدُ بْنُ أَبِي وَقَّاصٍ</text><text x="250" y="260" text-anchor="middle" font-family="Lora,serif" font-size="9" fill="#065F46" font-style="italic">Saad ibn Abi Waqqas · Muslim Forces</text><line x1="200" y1="214" x2="180" y2="148" stroke="#065F46" stroke-width="2" marker-end="url(#aG)"/><line x1="250" y1="214" x2="250" y2="148" stroke="#065F46" stroke-width="2.5" marker-end="url(#aG)"/><line x1="300" y1="214" x2="320" y2="148" stroke="#065F46" stroke-width="2" marker-end="url(#aG)"/><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 الْقَادِسِيَّةُ ١٥ هـ / 636 CE</text></svg>`,
+10:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EFF4F1"/><path d="M0,0 L122,0 Q100,102 82,202 Q62,282 72,340 L0,340Z" fill="#9FAF8A" opacity=".48"/><path d="M500,0 L378,0 Q400,102 418,202 Q438,282 428,340 L500,340Z" fill="#9FAF8A" opacity=".48"/><rect x="148" y="48" width="204" height="70" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="2" stroke-dasharray="4,2"/><text x="250" y="76" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10" fill="#9F1239" font-weight="800">الْقِلَاعُ الْفَارِسِيَّةُ + حَسَكُ حَدِيدٍ</text><rect x="48" y="143" width="148" height="42" rx="8" fill="#D97706" opacity=".9"/><text x="122" y="160" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="white" font-weight="800">شَائِعَةُ وَفَاةِ الْخَلِيفَةِ!</text><line x1="250" y1="120" x2="250" y2="163" stroke="#9F1239" stroke-width="2.5" marker-end="url(#aR)"/><rect x="178" y="133" width="144" height="22" rx="5" fill="#9F1239" opacity=".85"/><text x="250" y="147" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="white" font-weight="700">الْفُرْسُ يَخْرُجُونَ!</text><path d="M128,192 Q128,242 248,257 Q370,242 372,192" stroke="#065F46" stroke-width="3" fill="none" marker-end="url(#aG)"/><rect x="173" y="258" width="154" height="26" rx="6" fill="#065F46" opacity=".9"/><text x="250" y="274" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9.5" fill="white" font-weight="800">تَطْوِيقٌ كَامِلٌ!</text><rect x="158" y="296" width="184" height="30" rx="8" fill="#065F46" opacity=".1" stroke="#065F46" stroke-width="1.5"/><text x="250" y="315" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9.5" fill="#065F46" font-weight="800">النُّعْمَانُ بْنُ مُقَرِّنٍ (شَهِيدٌ)</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 نَهَاوَنْدُ ٢١ هـ / 642 CE</text></svg>`,
+11:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EEF3F0"/><path d="M0,252 Q250,237 500,250 L500,340 L0,340Z" fill="#A8C090" opacity=".33"/><rect x="98" y="24" width="304" height="75" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="49" text-anchor="middle" font-family="Cairo,sans-serif" font-size="11" fill="#9F1239" font-weight="800">الْفِرِنْجَةُ — شَارْلُ مَارْتِيلَ</text><line x1="200" y1="101" x2="200" y2="140" stroke="#9F1239" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#aR)"/><line x1="250" y1="101" x2="250" y2="140" stroke="#9F1239" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#aR)"/><line x1="300" y1="101" x2="300" y2="140" stroke="#9F1239" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#aR)"/><rect x="98" y="143" width="304" height="80" rx="10" fill="#065F46" opacity=".09" stroke="#065F46" stroke-width="2"/><text x="250" y="172" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10.5" fill="#065F46" font-weight="800">الدِّفَاعُ الْمُرَبَّعُ — الْغَافِقِيُّ</text><rect x="304" y="200" width="132" height="36" rx="6" fill="#D97706" opacity=".9"/><text x="370" y="214" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="white" font-weight="800">إِجْهَادٌ لُوجِسْتِيٌّ</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 بَلَاطُ الشُّهَدَاءِ ١١٤ هـ / 732 CE</text></svg>`,
+12:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EEF3F0"/><path d="M0,0 L152,0 Q122,82 102,202 Q92,272 102,340 L0,340Z" fill="#9FAF8A" opacity=".48"/><path d="M500,0 L348,0 Q378,82 398,202 Q408,272 398,340 L500,340Z" fill="#9FAF8A" opacity=".48"/><rect x="28" y="108" width="102" height="52" rx="8" fill="#065F46" opacity=".1" stroke="#065F46" stroke-width="1.5" stroke-dasharray="4,3"/><text x="79" y="131" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="#065F46" font-weight="800">جَنَاحٌ أَيْسَرُ مَخْفِيٌّ</text><rect x="370" y="108" width="102" height="52" rx="8" fill="#065F46" opacity=".1" stroke="#065F46" stroke-width="1.5" stroke-dasharray="4,3"/><text x="421" y="131" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="#065F46" font-weight="800">جَنَاحٌ أَيْمَنُ مَخْفِيٌّ</text><rect x="173" y="212" width="154" height="50" rx="10" fill="#065F46" opacity=".85"/><text x="250" y="233" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10" fill="white" font-weight="800">أَلْبُ أَرْسَلَانُ</text><rect x="158" y="58" width="184" height="55" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="82" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10" fill="#9F1239" font-weight="800">رُومَانُوسُ الرَّابِعُ</text><path d="M80,162 Q80,252 180,272 Q250,282 320,272 Q420,252 420,162" stroke="#065F46" stroke-width="2.5" fill="none" marker-end="url(#aG)" stroke-dasharray="6,3"/><rect x="173" y="278" width="154" height="26" rx="6" fill="#065F46" opacity=".9"/><text x="250" y="294" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="white" font-weight="800">الْهِلَالُ يُطْبِقُ!</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 مَلَاذْكِرْدُ ٤٦٣ هـ / 1071 CE</text></svg>`,
+13:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#F5EFE6"/><path d="M98,58 Q200,38 302,53 Q382,63 422,98 L422,198 Q382,228 302,238 Q200,248 98,233 Q58,218 58,148 Q58,88 98,58Z" fill="#C8A870" opacity=".28" stroke="#A8883A" stroke-width="1"/><text x="250" y="78" text-anchor="middle" font-family="Amiri,serif" font-size="11" fill="#7A5C1E" font-weight="700">هِضَابُ حِطِّينَ</text><ellipse cx="452" cy="182" rx="40" ry="60" fill="#1E40AF" opacity=".68"/><text x="452" y="185" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8" fill="white" font-weight="700">بُحَيْرَةُ طَبَرِيَّةَ</text><rect x="28" y="24" width="180" height="50" rx="8" fill="#065F46" opacity=".09" stroke="#065F46" stroke-width="1.5"/><text x="118" y="44" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9.5" fill="#065F46" font-weight="800">صَلَاحُ الدِّينِ</text><text x="178" y="157" text-anchor="middle" font-size="22">🔥</text><text x="262" y="172" text-anchor="middle" font-size="22">🔥</text><rect x="168" y="232" width="178" height="60" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="1.5"/><text x="257" y="256" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10" fill="#9F1239" font-weight="800">الصَّلِيبِيُّونَ — عَطَشٌ قَاتِلٌ</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 حِطِّينُ ٥٨٣ هـ / 1187 CE</text></svg>`,
+14:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EFF4F1"/><path d="M0,0 L132,0 Q102,102 112,202 Q122,272 102,340 L0,340Z" fill="#9FAF8A" opacity=".48"/><path d="M500,0 L368,0 Q398,102 388,202 Q378,272 398,340 L500,340Z" fill="#9FAF8A" opacity=".48"/><rect x="183" y="223" width="134" height="50" rx="8" fill="#065F46" opacity=".85"/><text x="250" y="245" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9.5" fill="white" font-weight="800">بَيْبَرْسُ</text><rect x="163" y="58" width="174" height="60" rx="10" fill="#9F1239" opacity=".09" stroke="#9F1239" stroke-width="1.5"/><text x="250" y="82" text-anchor="middle" font-family="Cairo,sans-serif" font-size="10.5" fill="#9F1239" font-weight="800">الْمَغُولُ — كَتْبُغَا</text><path d="M75,155 Q75,212 183,237" stroke="#065F46" stroke-width="2.5" fill="none" marker-end="url(#aG)"/><path d="M425,155 Q425,212 317,237" stroke="#065F46" stroke-width="2.5" fill="none" marker-end="url(#aG)"/><rect x="153" y="282" width="194" height="38" rx="10" fill="#065F46" opacity=".9"/><text x="250" y="300" text-anchor="middle" font-family="Amiri,serif" font-size="11" fill="#D9B673" font-weight="700">«وَاإِسْلَامَاهْ!»</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 عَيْنُ جَالُوتَ ٦٥٨ هـ / 1260 CE</text></svg>`,
+15:`<svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">${D}<rect width="500" height="340" fill="#EEF3F5"/><path d="M0,182 Q100,162 200,172 Q300,182 500,167 L500,340 L0,340Z" fill="#1E40AF" opacity=".18"/><rect x="98" y="28" width="304" height="102" rx="6" fill="#B8C4A8" stroke="#6B7280" stroke-width="2.5"/><text x="250" y="70" text-anchor="middle" font-family="Amiri,serif" font-size="13" fill="#374151" font-weight="700">الْقُسْطَنْطِينِيَّةُ</text><rect x="28" y="242" width="184" height="55" rx="10" fill="#065F46" opacity=".09" stroke="#065F46" stroke-width="1.5"/><text x="120" y="266" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9.5" fill="#065F46" font-weight="800">مُحَمَّدٌ الْفَاتِحُ — ٢١ عَامًا!</text><rect x="58" y="196" width="134" height="30" rx="6" fill="#D97706" opacity=".9"/><text x="125" y="214" text-anchor="middle" font-family="Cairo,sans-serif" font-size="8.5" fill="white" font-weight="800">مَدَافِعُ عِمْلَاقَةٌ 💥</text><rect x="298" y="242" width="178" height="65" rx="10" fill="#065F46" opacity=".09" stroke="#065F46" stroke-width="1.5"/><text x="387" y="262" text-anchor="middle" font-family="Cairo,sans-serif" font-size="9" fill="#065F46" font-weight="800">٧٠ سَفِينَةً بَرًّا!</text><text x="460" y="335" text-anchor="end" font-family="Cairo,sans-serif" font-size="8" fill="#8B7355">📍 فَتْحُ الْقُسْطَنْطِينِيَّةِ ٨٥٧ هـ / 1453 CE</text></svg>`
+};
+const MM={
+1:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#F0EBE0"/><rect x="20" y="8" width="50" height="18" rx="4" fill="#9F1239" opacity=".15"/><text x="45" y="20" text-anchor="middle" font-size="6" fill="#9F1239" font-weight="700">قُرَيْشٌ</text><circle cx="45" cy="40" r="10" fill="#1E40AF" opacity=".3"/><text x="45" y="43" text-anchor="middle" font-size="6" fill="#1E40AF" font-weight="700">مَاءٌ</text><rect x="18" y="54" width="54" height="17" rx="4" fill="#065F46" opacity=".15"/><text x="45" y="65" text-anchor="middle" font-size="6" fill="#065F46" font-weight="700">مُسْلِمُونَ</text></svg>`,
+2:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EEF5EE"/><path d="M0,0 L90,0 L90,35 Q45,28 0,35Z" fill="#9FAF8A" opacity=".5"/><text x="45" y="18" text-anchor="middle" font-size="6.5" fill="#4B5563" font-weight="700">أُحُدٌ</text><rect x="25" y="48" width="40" height="14" rx="3" fill="#065F46" opacity=".15"/><text x="45" y="57" text-anchor="middle" font-size="5.5" fill="#065F46" font-weight="700">مُسْلِمُونَ</text></svg>`,
+3:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EEF4F0"/><rect x="10" y="8" width="70" height="22" rx="4" fill="#9F1239" opacity=".1"/><text x="45" y="22" text-anchor="middle" font-size="6" fill="#9F1239" font-weight="700">أَحْزَابٌ</text><path d="M5,38 Q45,33 85,38" stroke="#1E40AF" stroke-width="5" fill="none"/><rect x="20" y="50" width="50" height="22" rx="4" fill="#065F46" opacity=".12"/><text x="45" y="64" text-anchor="middle" font-size="6" fill="#065F46" font-weight="700">الْمَدِينَةُ</text></svg>`,
+4:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#F0F4EE"/><rect x="62" y="10" width="22" height="28" rx="3" fill="#9F1239" opacity=".2"/><text x="73" y="26" text-anchor="middle" font-size="5" fill="#9F1239" font-weight="700">قَمُوصٌ</text><rect x="14" y="54" width="62" height="18" rx="4" fill="#065F46" opacity=".15"/><text x="45" y="65" text-anchor="middle" font-size="5.5" fill="#065F46" font-weight="700">عَلِيٌّ ر.ع</text></svg>`,
+5:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EEF3F0"/><rect x="10" y="8" width="70" height="20" rx="4" fill="#9F1239" opacity=".1"/><text x="45" y="21" text-anchor="middle" font-size="6" fill="#9F1239" font-weight="700">رُومٌ</text><rect x="22" y="50" width="46" height="18" rx="4" fill="#065F46" opacity=".15"/><text x="45" y="62" text-anchor="middle" font-size="5.5" fill="#065F46" font-weight="700">خَالِدٌ</text></svg>`,
+6:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EFF4F1"/><circle cx="45" cy="42" r="16" fill="#D97706" opacity=".1"/><text x="45" y="45" text-anchor="middle" font-size="5.5" fill="#D97706">كَمِينٌ!</text><circle cx="45" cy="60" r="8" fill="#065F46" opacity=".85"/><text x="45" y="63" text-anchor="middle" font-size="8" fill="white">ﷺ</text></svg>`,
+7:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#F5F0E8"/><circle cx="10" cy="60" r="8" fill="#065F46" opacity=".8"/><rect x="64" y="38" width="24" height="18" rx="3" fill="#065F46" opacity=".15"/><text x="76" y="49" text-anchor="middle" font-size="5.5" fill="#065F46">تَبُوكُ</text></svg>`,
+8:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EFF4F1"/><rect x="12" y="35" width="66" height="22" rx="4" fill="#065F46" opacity=".1"/><text x="45" y="47" text-anchor="middle" font-size="5" fill="#065F46">الْكَرَادِيسُ</text></svg>`,
+9:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#F0F4EF"/><text x="20" y="20" text-anchor="middle" font-size="16">🐘</text><text x="45" y="20" text-anchor="middle" font-size="16">🐘</text><text x="70" y="20" text-anchor="middle" font-size="16">🐘</text><rect x="15" y="54" width="60" height="17" rx="4" fill="#065F46" opacity=".15"/><text x="45" y="65" text-anchor="middle" font-size="5.5" fill="#065F46" font-weight="700">سَعْدُ بْنُ أَبِي وَقَّاصٍ</text></svg>`,
+10:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EFF4F1"/><rect x="18" y="52" width="54" height="18" rx="4" fill="#065F46" opacity=".12"/><text x="45" y="63" text-anchor="middle" font-size="5.5" fill="#065F46" font-weight="700">تَطْوِيقٌ!</text></svg>`,
+11:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EEF3F0"/><rect x="15" y="35" width="60" height="22" rx="4" fill="#065F46" opacity=".1"/><text x="45" y="48" text-anchor="middle" font-size="5.5" fill="#065F46" font-weight="700">الدِّفَاعُ الْمُرَبَّعُ</text></svg>`,
+12:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EEF3F0"/><rect x="28" y="42" width="34" height="18" rx="5" fill="#065F46" opacity=".85"/><text x="45" y="52" text-anchor="middle" font-size="6" fill="white" font-weight="700">أَلْبُ أَرْسَلَانُ</text></svg>`,
+13:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#F5EFE6"/><ellipse cx="45" cy="35" rx="35" ry="25" fill="#C8A870" opacity=".3"/><text x="45" y="38" text-anchor="middle" font-size="6" fill="#7A5C1E" font-weight="700">حِطِّينُ</text><text x="22" y="58" text-anchor="middle" font-size="14">🔥</text><text x="68" y="58" text-anchor="middle" font-size="14">🔥</text></svg>`,
+14:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EFF4F1"/><rect x="25" y="44" width="40" height="16" rx="4" fill="#065F46" opacity=".85"/><text x="45" y="55" text-anchor="middle" font-size="5.5" fill="white" font-weight="700">بَيْبَرْسُ</text><text x="45" y="72" text-anchor="middle" font-size="5.5" fill="#065F46" font-weight="700">«وَاإِسْلَامَاهْ!»</text></svg>`,
+15:`<svg viewBox="0 0 90 80" xmlns="http://www.w3.org/2000/svg"><rect width="90" height="80" fill="#EEF3F5"/><rect x="15" y="8" width="60" height="30" rx="5" fill="#B8C4A8"/><text x="45" y="26" text-anchor="middle" font-size="5.5" fill="#374151" font-weight="700">الْقُسْطَنْطِينِيَّةُ</text><text x="68" y="72" text-anchor="middle" font-size="14">⛵</text></svg>`
+};
+const BATTLES=[
+{id:1,yearH:'٢ هـ',yearM:'624 م',nameAr:'غَزْوَةُ بَدْرٍ الْكُبْرَى',nameEn:'The Great Battle of Badr',epoch:'2 AH · 624 CE',location:'آبَارُ بَدْرٍ',color:'#064E3B',causesAr:'اعْتِرَاضُ عِيرِ قُرَيْشٍ الْكُبْرَى الْقَادِمَةِ مِنَ الشَّامِ، وَتَصَاعُدُ التَّوَتُّرِ بَعْدَ الْهِجْرَةِ.',causesEn:'Intercepting the Quraysh trade caravan from Syria amid post-Hijra escalating tensions.',tacticAr:'السَّيْطَرَةُ الْكَامِلَةُ عَلَى مَصَادِرِ الْمِيَاهِ بِمَشُورَةِ الْحُبَابِ بْنِ الْمُنْذِرِ مَعَ تَشْكِيلِ صُفُوفٍ مَحْكَمَةٍ.',tacticEn:'Complete water source control through Hubab ibn al-Mundhir\'s counsel, with tight formations.',figures:['الرَّسُولُ ﷺ','حَمْزَةُ بْنُ عَبْدِ الْمُطَّلِبِ','عَلِيُّ بْنُ أَبِي طَالِبٍ','الْحُبَابُ بْنُ الْمُنْذِرِ','أَبُو جَهْلٍ'],figuresEn:["The Prophet ﷺ", "Hamza ibn Abd al-Muttalib", "Ali ibn Abi Talib", "Al-Hubab ibn al-Mundhir", "Abu Jahl (Quraysh commander)"],narratorAr:'وَقَفَ الْمُسْلِمُونَ صَفًّا وَاحِدًا كَالْبُنْيَانِ الْمَرْصُوصِ أَمَامَ جَيْشٍ يَفُوقُهُمْ ثَلَاثَةَ أَضْعَافٍ، لَكِنَّ التَّخْطِيطَ الْجُغْرَافِيَّ الْمُحْكَمَ وَالسَّيْطَرَةَ عَلَى الْمَاءِ صَنَعَا النَّصْرَ الْأَوَّلَ لِلإِسْلَامِ.',narratorEn:'Muslims stood unified against a force three times their size. Masterful geographic planning and water control secured Islam\'s first great victory at the wells of Badr.',resultsAr:'نَصْرٌ مُؤَزَّرٌ — مَقْتَلُ ٧٠ قَائِدًا مِنْ قُرَيْشٍ وَأَسْرُ ٧٠ آخَرِينَ.',resultsEn:'Decisive victory — 70 Quraysh leaders killed, 70 captured. A turning point for the Islamic state.',lessons:['الإِدَارَةُ اللُّوجِسْتِيَّةُ تَتَفَوَّقُ عَلَى الْكَثْرَةِ','قِيمَةُ الشُّورَى الْمَيْدَانِيَّةِ','الثِّقَةُ بِاللهِ تَصْنَعُ الرُّوحَ','التَّحَكُّمُ الْجُغْرَافِيُّ حَاسِمٌ'],lessonsEn:["Logistics triumph over numbers", "Field consultation wins battles", "Faith builds unshakeable morale", "Geographic control is decisive"]},
+{id:2,yearH:'٣ هـ',yearM:'625 م',nameAr:'غَزْوَةُ أُحُدٍ',nameEn:'The Battle of Uhud',epoch:'3 AH · 625 CE',location:'جَبَلُ أُحُدٍ',color:'#B45309',causesAr:'انْتِقَامُ قُرَيْشٍ لِهَزِيمَةِ بَدْرٍ بِجَيْشٍ ثَلَاثَةِ آلَافِ مُقَاتِلٍ.',causesEn:'Quraysh revenge for Badr, mobilizing 3,000 warriors.',tacticAr:'تَأْمِينُ الْعُمْقِ الدِّفَاعِيِّ بِنَشْرِ خَمْسِينَ رَامِيًا عَلَى جَبَلِ عَيْنَيْنِ لِحِمَايَةِ الظَّهْرِ.',tacticEn:'Securing defensive depth by deploying 50 archers on Mount Aynayn.',figures:['الرَّسُولُ ﷺ','حَمْزَةُ (سَيِّدُ الشُّهَدَاءِ)','خَالِدُ بْنُ الْوَلِيدِ (قُرَيْشٌ)','عَبْدُ اللهِ بْنُ جُبَيْرٍ'],figuresEn:["The Prophet ﷺ", "Hamza (Lord of Martyrs)", "Khalid ibn al-Walid (Quraysh)", "Abd Allah ibn Jubayr"],narratorAr:'صَعِدَ الرُّمَاةُ جَبَلَ عَيْنَيْنِ بِأَمْرٍ نَبَوِيٍّ صَارِمٍ أَلَّا يَبْرَحُوا مَكَانَهُمْ، لَكِنَّ اسْتِعْجَالَ الْغَنِيمَةِ فَتَحَ ثُغْرَةً اسْتِرَاتِيجِيَّةً قَلَبَتْ مَوَازِينَ الْمَعْرَكَةِ.',narratorEn:'Archers held position by Prophetic order — until lure of spoils opened a fatal flank Khalid exploited.',resultsAr:'اسْتِشْهَادُ ٧٠ صَحَابِيًّا مِنْهُمْ حَمْزَةُ — النَّبِيُّ ﷺ نَجَا وَالْجَيْشُ لَمْ يُبَدَّ.',resultsEn:'70 companions martyred including Hamza. The Prophet survived.',lessons:['الِالْتِزَامُ بِالْأَوَامِرِ فَرِيضَةٌ','ثُغْرَةٌ وَاحِدَةٌ تَقْلِبُ النَّصْرَ','الطَّمَعُ يُلْغِي الْخُطَطَ','الثَّبَاتُ الْقِيَادِيُّ فِي الشَّدَائِدِ'],lessonsEn:["Strict obedience to orders is mandatory", "A single breach can flip a victory", "Greed cancels even perfect plans", "Steadfast leadership in hardship"]},
+{id:3,yearH:'٥ هـ',yearM:'627 م',nameAr:'غَزْوَةُ الْخَنْدَقِ',nameEn:'The Battle of the Trench',epoch:'5 AH · 627 CE',location:'الْمَدِينَةُ الْمُنَوَّرَةُ',color:'#1E40AF',causesAr:'تَحَالُفُ الْقَبَائِلِ لِاسْتِئْصَالِ الْمُسْلِمِينَ بِجَيْشٍ عَشَرَةِ آلَافِ مُقَاتِلٍ.',causesEn:'Coalition mobilized 10,000 warriors to eliminate Medina.',tacticAr:'الْمُفَاجَأَةُ الْهَنْدَسِيَّةُ بِحَفْرِ خَنْدَقٍ شَمَالِيٍّ بِمَشُورَةِ سَلْمَانَ الْفَارِسِيِّ.',tacticEn:'A surprise defensive trench based on Salman al-Farisi\'s expertise.',figures:['الرَّسُولُ ﷺ','سَلْمَانُ الْفَارِسِيُّ','نُعَيْمُ بْنُ مَسْعُودٍ','أَبُو سُفْيَانَ'],figuresEn:["The Prophet ﷺ", "Salman al-Farisi (proposed the trench)", "Nuaym ibn Masud (diplomatic saboteur)", "Abu Sufyan (coalition commander)"],narratorAr:'عَشَرَةُ آلَافِ مُقَاتِلٍ جَاءُوا لِاسْتِئْصَالِ الْمُسْلِمِينَ فَوَقَفُوا مَذْهُولِينَ أَمَامَ أُخْدُودٍ عَمِيقٍ لَمْ تَعْرِفْهُ الْعَرَبُ قَطُّ.',narratorEn:'Ten thousand warriors stood frozen before a trench alien to Arabian warfare.',resultsAr:'فَشَلُ الْحِصَارِ وَانْسِحَابُ الْأَحْزَابِ — نَصْرٌ حَاسِمٌ.',resultsEn:'Siege failed — Coalition retreated. Decisive victory.',lessons:['الاِسْتِفَادَةُ مِنْ عُلُومِ الْحَضَارَاتِ','الدِّبْلُومَاسِيَّةُ تُكَمِّلُ الْقُوَّةَ','الطَّبِيعَةُ حِصْنٌ مَنِيعٌ','الْعَقْلُ أَقْوَى مِنَ الْعَضَلَاتِ'],lessonsEn:["Borrow military knowledge from all civilizations", "Diplomacy complements force", "Natural terrain is a fortress", "Intellect outweighs brute strength"]},
+{id:4,yearH:'٧ هـ',yearM:'628 م',nameAr:'غَزْوَةُ خَيْبَرَ',nameEn:'The Conquest of Khaybar',epoch:'7 AH · 628 CE',location:'وَاحَةُ خَيْبَرَ',color:'#7C3AED',causesAr:'إِنْهَاءُ الْمُؤَامَرَاتِ الْعَسْكَرِيَّةِ وَقَطْعُ مَصَادِرِ تَمْوِيلِ الْأَحْزَابِ.',causesEn:'Neutralizing conspiracies and cutting funding for anti-Muslim coalitions.',tacticAr:'الْحِصَارُ الاِقْتِصَادِيُّ الْمُتَدَرِّجُ — عَزْلُ كُلِّ حِصْنٍ وَضَرْبُهُ مُنْفَرِدًا.',tacticEn:'Graduated economic siege — isolating each fortress individually.',figures:['الرَّسُولُ ﷺ','عَلِيُّ بْنُ أَبِي طَالِبٍ','مَرْحَبٌ الْيَهُودِيُّ','صَفِيَّةُ بِنْتُ حُيَيٍّ'],figuresEn:["The Prophet ﷺ", "Ali ibn Abi Talib (conqueror of Al-Qamus)", "Marhab the Jew (slain champion)", "Safiyya bint Huyayy"],narratorAr:'حُمِلَتِ الرَّايَةُ بِأَمْرٍ نَبَوِيٍّ لِرَجُلٍ يُحِبُّ اللهَ وَرَسُولَهُ فَتَهَاوَتْ قِلَاعُ خَيْبَرَ الْمَنِيعَةُ.',narratorEn:'The banner was entrusted to the true lover of Allah — Khaybar\'s fortresses fell one by one.',resultsAr:'فَتْحُ خَيْبَرَ — نِهَايَةُ الْخَطَرِ الشَّمَالِيِّ.',resultsEn:'Conquest of Khaybar — end of the northern threat.',lessons:['أَهَمِّيَّةُ الِاسْتِخْبَارَاتِ','تَفْكِيكُ التَّحَالُفَاتِ','التَّعْيِينُ الْقِيَادِيُّ الصَّحِيحُ','الْحِصَارُ الاِقْتِصَادِيُّ سِلَاحٌ'],lessonsEn:["Good intelligence precedes victory", "Isolate fortresses then take them one by one", "Right leadership assignment matters", "Economic siege is a powerful weapon"]},
+{id:5,yearH:'٨ هـ',yearM:'629 م',nameAr:'مَعْرَكَةُ مُؤْتَةَ',nameEn:"The Battle of Mu'tah",epoch:'8 AH · 629 CE',location:'الْكَرَكُ — الأُرْدُنُّ',color:'#9F1239',causesAr:'مَقْتَلُ رَسُولِ النَّبِيِّ ﷺ عَلَى يَدِ الْغَسَّاسِنَةِ — رَدٌّ حَازِمٌ وَاجِبٌ.',causesEn:'Assassination of the Prophet\'s envoy demanded a decisive response.',tacticAr:'الْحَرْبُ النَّفْسِيَّةُ بِإِعَادَةِ هَيْكَلَةِ الْأَجْنِحَةِ لَيْلًا ثُمَّ انْسِحَابٌ تَكْتِيكِيٌّ مُنَظَّمٌ.',tacticEn:'Psychological warfare: reshuffling flanks at night, masterful extraction (3,000 vs 200,000).',figures:['زَيْدُ بْنُ حَارِثَةَ (شَهِيدٌ)','جَعْفَرُ بْنُ أَبِي طَالِبٍ (شَهِيدٌ)','عَبْدُ اللهِ بْنُ رَوَاحَةَ (شَهِيدٌ)','خَالِدُ بْنُ الْوَلِيدِ'],figuresEn:["Zayd ibn Haritha (1st commander, martyred)", "Jafar ibn Abi Talib (martyred)", "Abd Allah ibn Rawaha (martyred)", "Khalid ibn al-Walid — Sword of Allah"],narratorAr:'أَعَادَ خَالِدٌ تَرْتِيبَ الْمَجْنَحَتَيْنِ فِي جَوْفِ اللَّيْلِ فَظَنَّ الرُّومُ أَنَّ مَدَدًا هَائِلًا وَصَلَ فَتَنَحَّوْا خَوْفًا.',narratorEn:'Khalid reshuffled flanks at night — Byzantines believed reinforcements arrived and pulled back.',resultsAr:'اسْتِشْهَادُ الْقُوَّادِ الثَّلَاثَةِ — الْجَيْشُ عَادَ سَالِمًا.',resultsEn:'Three commanders martyred, but troops returned safely.',lessons:['التَّرَاجُعُ الْمُنَظَّمُ انْتِصَارٌ','الْقِيَادَةُ تَتَكَيَّفُ مَعَ الظُّرُوفِ','الْحَرْبُ النَّفْسِيَّةُ أَقْوَى','الِاسْتِمْرَارِيَّةُ رَغْمَ فَقْدِ الْقَائِدِ'],lessonsEn:["An organized retreat is a strategic victory", "Leadership adapts to circumstances", "Psychological warfare surpasses spears", "Continuity despite losing the commander"]},
+{id:6,yearH:'٨ هـ',yearM:'630 م',nameAr:'غَزْوَةُ حُنَيْنٍ',nameEn:'The Battle of Hunayn',epoch:'8 AH · 630 CE',location:'وَادِي حُنَيْنٍ',color:'#D97706',causesAr:'حَشَدَتْ قَبَائِلُ هَوَازِنَ وَثَقِيفٍ بَعْدَ فَتْحِ مَكَّةَ لِصَدِّ الْمَدِّ الإِسْلَامِيِّ.',causesEn:'Hawazin and Thaqif tribes rallied to halt the Islamic advance.',tacticAr:'اسْتِيعَابُ صَدْمَةِ الْكَمِينِ الْجَبَلِيِّ وَإِعَادَةُ التَّجَمُّعِ السَّرِيعِ وَالْهُجُومُ الْمُضَادُّ.',tacticEn:'Absorbing the ambush, rapid regrouping, then crushing counter-offensive.',figures:['الرَّسُولُ ﷺ (ثَبَتَ)','الْعَبَّاسُ بْنُ عَبْدِ الْمُطَّلِبِ','أَبُو سُفْيَانُ بْنُ الْحَارِثِ','خَالِدُ بْنُ الْوَلِيدِ'],figuresEn:["The Prophet ﷺ (held firm)", "Al-Abbas ibn Abd al-Muttalib", "Abu Sufyan ibn al-Harith", "Khalid ibn al-Walid"],narratorAr:'أَنَا النَّبِيُّ لَا كَذِبْ أَنَا ابْنُ عَبْدِ الْمُطَّلِبْ! صَرْخَةٌ نَبَوِيَّةٌ زَلْزَلَتِ الْوَادِيَ فَأَعَادَتْ صُفُوفًا تَمَزَّقَتْ.',narratorEn:'"I am the Prophet — no lie!" A Prophetic war cry rallied shattered lines to victory.',resultsAr:'انْتِصَارٌ كَاسِحٌ — إِسْلَامُ هَوَازِنَ وَعَفْوٌ نَبَوِيٌّ كَرِيمٌ.',resultsEn:'Crushing victory — Hawazin embraced Islam, captives pardoned.',lessons:['لَا تَغْتَرَّ بِالْكَثْرَةِ','الثَّبَاتُ الْقِيَادِيُّ يَصْنَعُ الْفَارِقَ','الِانْهِيَارُ لَا يَعْنِي الْهَزِيمَةَ','الْكَرَمُ يَكْسِبُ الْقُلُوبَ'],lessonsEn:["Never be deceived by numerical superiority", "Leadership resolve makes the difference", "Initial collapse does not mean defeat", "Generosity after victory wins hearts"]},
+{id:7,yearH:'٩ هـ',yearM:'630 م',nameAr:'غَزْوَةُ تَبُوكَ',nameEn:'The Tabuk Expedition',epoch:'9 AH · 630 CE',location:'تَبُوكُ الشِّمَالِيَّةُ',color:'#064E3B',causesAr:'تَجَمُّعُ قُوَّاتِ الرُّومِ لِضَرْبِ الدَّوْلَةِ الإِسْلَامِيَّةِ قَبْلَ اسْتِوَائِهَا.',causesEn:'Byzantine forces massed to strike the Islamic state before it consolidated.',tacticAr:'الرَّدْعُ الاِسْتِرَاتِيجِيُّ الْوِقَائِيُّ — نَقْلُ الْمَعْرَكَةِ إِلَى أَرَاضِي الْعَدُوِّ.',tacticEn:'Preemptive deterrence — carrying the war to enemy territory.',figures:['الرَّسُولُ ﷺ','أَبُو بَكْرٍ (أَنْفَقَ كُلَّ مَالِهِ)','عُثْمَانُ (جَهَّزَ الْجَيْشَ)','الثَّلَاثَةُ الَّذِينَ خُلِّفُوا'],figuresEn:["The Prophet ﷺ", "Abu Bakr al-Siddiq (donated all his wealth)", "Uthman ibn Affan (equipped the army)", "The three companions who stayed behind"],narratorAr:'سَارَ جَيْشُ الْعُسْرَةِ فِي هَجِيرِ الصَّيْفِ فَنَصَرَ اللهُ نَبِيَّهُ بِالرُّعْبِ فِي قُلُوبِ الرُّومِ.',narratorEn:'The Army of Hardship marched through deserts — Allah cast terror into Byzantine hearts.',resultsAr:'انْسِحَابُ الرُّومِ دُونَ قِتَالٍ — مُعَاهَدَاتُ سَلَامٍ.',resultsEn:'Byzantine withdrawal without combat — peace treaties established.',lessons:['الرَّدْعُ يَمْنَعُ الْحُرُوبَ','الإِنْفَاقُ يَسْنُدُ الْعَسْكَرَ','الْحَرْبُ النَّفْسِيَّةُ تَحْسِمُ','الصَّبْرُ وَالتَّضْحِيَةُ سِلَاحٌ'],lessonsEn:["Deterrence prevents wars", "Financial sacrifice sustains the military", "Psychological warfare decides without bloodshed", "Patience and sacrifice are lethal weapons"]},
+{id:8,yearH:'١٣ هـ',yearM:'634 م',nameAr:'مَعْرَكَةُ الْيَرْمُوكِ',nameEn:'The Battle of Yarmouk',epoch:'13 AH · 634 CE',location:'نَهْرُ الْيَرْمُوكِ',color:'#1E40AF',causesAr:'رَغْبَةُ هِرَقْلَ فِي إِنْهَاءِ الْوُجُودِ الإِسْلَامِيِّ بِمِئَتَيْ أَلْفِ مُقَاتِلٍ.',causesEn:'Heraclius sought to eliminate Islamic presence with 200,000 warriors.',tacticAr:'نِظَامُ الْكَرَادِيسِ الثَّوْرِيُّ — عَزْلُ الْخَيَّالَةِ وَدَفْعُهُمْ نَحْوَ الْهَاوِيَةِ.',tacticEn:'Revolutionary Karadis system — isolating cavalry, driving into the ravine.',figures:['خَالِدُ بْنُ الْوَلِيدِ','أَبُو عُبَيْدَةَ بْنُ الْجَرَّاحِ','عِكْرِمَةُ بْنُ أَبِي جَهْلٍ','هِرَقْلُ'],figuresEn:["Khalid ibn al-Walid (battle architect)", "Abu Ubayda ibn al-Jarrah", "Ikrima ibn Abi Jahl", "Emperor Heraclius"],narratorAr:'أَعَادَ خَالِدٌ صِيَاغَةَ الْعُلُومِ الْعَسْكَرِيَّةِ بِتَكْتِيكِ الْكَرَادِيسِ لِيَهْزِمَ إِمْبَرَاطُورِيَّةً لَا تُقْهَرُ.',narratorEn:'Khalid rewrote the science of war, shattering an unconquerable empire.',resultsAr:'انْهِيَارٌ كَامِلٌ لِلْبِيزَنْطِيِّينَ — فَتْحُ الشَّامِ بِأَسْرِهِ.',resultsEn:'Total Byzantine collapse — Syria opened for Islamic civilization.',lessons:['التَّشْكِيلُ الْمَرِنُ يَتَفَوَّقُ','الِاسْتِغْلَالُ الْعَسْكَرِيُّ لِلتَّضَارِيسِ','عَزْلُ فُرُوعِ الْجَيْشِ','الضَّرَبَةُ الْمُحْكَمَةُ تَحْسِمُ'],lessonsEn:["Flexible formations beat sheer mass", "Exploit terrain to maximum advantage", "Isolate enemy branches from each other", "A single well-timed blow is decisive"]},
+{id:9,yearH:'١٥ هـ',yearM:'636 م',nameAr:'مَعْرَكَةُ الْقَادِسِيَّةِ',nameEn:'The Battle of Al-Qadisiyyah',epoch:'15 AH · 636 CE',location:'الْقَادِسِيَّةُ',color:'#D97706',causesAr:'فَتْحُ الْعِرَاقِ وَهَدْمُ الدَّوْلَةِ السَّاسَانِيَّةِ.',causesEn:'Opening Iraq and dismantling the Sasanian empire.',tacticAr:'تَحْيِيدُ الْفِيلَةِ بِقَطْعِ حِبَالِهَا وَفَقْءِ عُيُونِهَا.',tacticEn:'Neutralizing war elephants by cutting harnesses and blinding them.',figures:['سَعْدُ بْنُ أَبِي وَقَّاصٍ','الْقَعْقَاعُ بْنُ عَمْرٍو','رُسْتُمُ (قُتِلَ)','طُلَيْحَةُ الْأَسَدِيُّ'],figuresEn:["Saad ibn Abi Waqqas (commander)", "Al-Qaqaa ibn Amr", "Rustam (Persian commander, killed)", "Tulayha al-Asadi"],narratorAr:'أَرْبَعَةُ أَيَّامٍ مِنَ الْقِتَالِ الضَّارِي غَيَّرَتْ التَّارِيخَ حَيْثُ تَحَوَّلَتْ فِيلَةُ الْفُرْسِ إِلَى نَقْمَةٍ عَلَيْهِمْ.',narratorEn:'Four days of combat — Sasanian elephants were blinded and turned against their own legions.',resultsAr:'مَقْتَلُ رُسْتُمَ — فَتْحُ الْمَدَائِنِ.',resultsEn:'Rustam killed — Ctesiphon opened.',lessons:['تَحْيِيدُ الْقُوَّةِ الضَّارِبَةِ','مَقْتَلُ الْقَائِدِ يُنْهِي الْمَعْرَكَةَ','الإِبْدَاعُ يَتَفَوَّقُ','أَيَّامٌ قَلِيلَةٌ تُقَرِّرُ قُرُونًا'],lessonsEn:["Neutralize the strike force with simple tools", "Killing the commander collapses the army", "Creativity beats tradition", "A few days determine centuries of rule"]},
+{id:10,yearH:'٢١ هـ',yearM:'642 م',nameAr:'مَعْرَكَةُ نَهَاوَنْدَ',nameEn:'The Conquest of Conquests — Nahavand',epoch:'21 AH · 642 CE',location:'نَهَاوَنْدُ',color:'#7C3AED',causesAr:'الْحَشْدُ الْفَارِسِيُّ الْأَخِيرُ لِإِنْهَاءِ الْوُجُودِ الإِسْلَامِيِّ.',causesEn:'The final Persian mobilization to eradicate Islamic presence.',tacticAr:'شَائِعَةُ وَفَاةِ الْخَلِيفَةِ وَانْسِحَابٌ وَهْمِيٌّ ثُمَّ تَطْوِيقٌ كَامِلٌ.',tacticEn:'Spreading rumors and feigning retreat then complete encirclement.',figures:['النُّعْمَانُ بْنُ مُقَرِّنٍ (شَهِيدٌ)','الْقَعْقَاعُ بْنُ عَمْرٍو','حُذَيْفَةُ بْنُ الْيَمَانِ'],figuresEn:["Al-Numan ibn Muqarrin (martyred in battle)", "Al-Qaqaa ibn Amr", "Hudhayfah ibn al-Yaman"],narratorAr:'أُخْرِجَ الْفُرْسُ مِنْ قِلَاعِهِمْ بِخُدْعَةِ الاِنْسِحَابِ فَكَانَتْ نَهَاوَنْدُ فَتْحَ الْفُتُوحِ.',narratorEn:'Persian forces lured from fortresses — Nahavand became the Conquest of Conquests.',resultsAr:'نِهَايَةُ الدَّوْلَةِ السَّاسَانِيَّةِ إِلَى الْأَبَدِ.',resultsEn:'Permanent end of the Sasanian Persian empire.',lessons:['الْقِلَاعُ تُهْزَمُ بِالِاسْتِدْرَاجِ','الشَّائِعَةُ سِلَاحٌ حَرْبِيٌّ','التَّضْحِيَةُ تُحَقِّقُ النَّصْرَ','الِانْتِصَارُ الْحَاسِمُ يُنْهِي قُرُونًا'],lessonsEn:["Fortresses fall to baiting, not storming", "A directed rumour is a weapon of war", "Self-sacrifice achieves victory", "A decisive win ends centuries of conflict"]},
+{id:11,yearH:'١١٤ هـ',yearM:'732 م',nameAr:'مَعْرَكَةُ بَلَاطِ الشُّهَدَاءِ',nameEn:'The Battle of Tours / Poitiers',epoch:'114 AH · 732 CE',location:'بُوَاتِيِيهَ — فَرَنْسَا',color:'#9F1239',causesAr:'التَّمَدُّدُ الإِسْلَامِيُّ فِي أُورُوبَّا الْغَرْبِيَّةِ مُوَاجِهًا صُمُودَ الْفِرِنْجَةِ.',causesEn:'Islamic expansion meeting Frankish resistance led by Charles Martel.',tacticAr:'الدِّفَاعُ الْمُرَبَّعُ الصَّامِدُ فِي ظُرُوفِ إِجْهَادٍ لُوجِسْتِيٍّ.',tacticEn:'Square defense amid severe logistical overextension.',figures:['عَبْدُ الرَّحْمَنِ الْغَافِقِيُّ (شَهِيدٌ)','شَارْلُ مَارْتِيلَ'],figuresEn:["Abd al-Rahman al-Ghafiqi (martyred)", "Charles Martel (Frankish commander)"],narratorAr:'عَلَى أَرْضِ فِرَنْسَا اسْتُشْهِدَ الْغَافِقِيُّ لِتَقِفَ عِنْدَ هَذَا الْبَلَاطِ حُدُودُ التَّمَدُّدِ الْأُمَوِيِّ.',narratorEn:'On French soil, Al-Ghafiqi was martyred — Umayyad expansion halted.',resultsAr:'اسْتِشْهَادُ الْغَافِقِيِّ — وَقْفُ التَّمَدُّدِ.',resultsEn:'Al-Ghafiqi martyred — westward expansion permanently halted.',lessons:['خَطَرُ إِثْقَالِ الإِمْدَادِ','الْبُعْدُ يُضْعِفُ الْقُوَّةَ','مَعْرَكَةٌ تُغَيِّرُ التَّارِيخَ','حِمَايَةُ الْعُمْقِ الْخَلْفِيِّ'],lessonsEn:["Overextended supply lines are fatal", "Distance from the centre weakens power", "One battle can reshape European history", "Protecting the strategic rear is essential"]},
+{id:12,yearH:'٤٦٣ هـ',yearM:'1071 م',nameAr:'مَعْرَكَةُ مَلَاذْكِرْدَ',nameEn:'The Battle of Manzikert',epoch:'463 AH · 1071 CE',location:'شَرْقُ الْأَنَاضُولِ',color:'#064E3B',causesAr:'رُومَانُوسُ يَسْعَى لِسَحْقِ الْقُوَّةِ السَّلْجُوقِيَّةِ.',causesEn:'Romanos IV sought to crush the rising Seljuk power.',tacticAr:'الْكَمِينُ الْهِلَالِيُّ: تَرَاجُعٌ وَهْمِيٌّ ثُمَّ إِطْبَاقُ الْأَجْنِحَةِ.',tacticEn:'Crescent ambush: feigned retreat, then hidden flanks close.',figures:['أَلْبُ أَرْسَلَانُ (بِثِيَابِ الْكَفَنِ!)','رُومَانُوسُ (أُسِرَ)'],figuresEn:["Sultan Alp Arslan (wore his burial shroud!)", "Emperor Romanos IV (captured)"],narratorAr:'بِثِيَابِ كَفَنِهِ قَادَ أَلْبُ أَرْسَلَانُ كَمِينَ الاِنْسِحَابِ لِيَفْتَحَ أَبْوَابَ الْأَنَاضُولِ.',narratorEn:'In his burial shroud, Alp Arslan led the ambush — opening Anatolia\'s gates.',resultsAr:'أَسْرُ الإِمْبَرَاطُورِ — فَتْحُ الْأَنَاضُولِ.',resultsEn:'Emperor captured — Anatolia opened to Turkish civilization.',lessons:['التَّرَاجُعُ يَقْلِبُ الْمَوَازِينَ','أَسْرُ الرَّأْسِ يُنْهِي الْحَرْبَ','الِاسْتِطْلَاعُ الضَّعِيفُ مُهْلِكٌ','الشَّجَاعَةُ تُلْهِمُ'],lessonsEn:["A feigned retreat turns the balance", "Capturing the enemy leader ends the war", "Poor reconnaissance destroys an army", "Courage and symbolism inspire troops"]},
+{id:13,yearH:'٥٨٣ هـ',yearM:'1187 م',nameAr:'مَعْرَكَةُ حِطِّينَ',nameEn:'The Battle of Hattin',epoch:'583 AH · 1187 CE',location:'قُرُونُ حِطِّينَ',color:'#B45309',causesAr:'نَقْضُ الصَّلِيبِيِّينَ الْعُهُودَ وَاعْتِدَاءُ أَرْنَاطَ عَلَى الْقَوَافِلِ.',causesEn:'Crusader treaty violations and Reynald\'s attack on caravans.',tacticAr:'التَّعْطِيشُ اللُّوجِسْتِيُّ: عَزْلُ الصَّلِيبِيِّينَ عَنِ الْمَاءِ.',tacticEn:'Strategic dehydration: cutting off water supply.',figures:['صَلَاحُ الدِّينِ الْأَيُّوبِيُّ','لُوزِينْيَانُ (أُسِرَ)','أَرْنَاطُ (قُتِلَ)'],figuresEn:["Saladin al-Ayyubi", "King Lusignan (captured)", "Reynald of Chatillon (executed)"],narratorAr:'أَحَاطَتِ النِّيرَانُ بِفُرْسَانِ الصَّلِيبِ الْمُنْهَكِينَ مِنَ الْعَطَشِ فَفُتِحَ الطَّرِيقُ لِلْقُدْسِ.',narratorEn:'Surrounded by flames and thirst, the Crusader cavalry crumbled.',resultsAr:'أَسْرُ الْمَلِكِ — اسْتِرْدَادُ الْقُدْسِ بَعْدَ ٨٨ عَامًا.',resultsEn:'King captured — Jerusalem liberated after 88 years.',lessons:['الطَّبِيعَةُ أَسْلِحَةٌ','حِرْمَانُ الْعَدُوِّ مِنَ الْمَاءِ','الصَّبْرُ الاِسْتِرَاتِيجِيُّ','نَقْضُ الْعُهُودِ لَهُ ثَمَنٌ'],lessonsEn:["Nature and geography are weapons", "Depriving the enemy of water breaks them", "Strategic patience creates the decisive moment", "Breaking treaties has an inevitable price"]},
+{id:14,yearH:'٦٥٨ هـ',yearM:'1260 م',nameAr:'مَعْرَكَةُ عَيْنِ جَالُوتَ',nameEn:'The Battle of Ain Jalut',epoch:'658 AH · 1260 CE',location:'مَرْجُ عَيْنِ جَالُوتَ',color:'#9F1239',causesAr:'زَحْفُ الْمَغُولِ الْمُدَمِّرُ بَعْدَ سُقُوطِ بَغْدَادَ.',causesEn:'Mongol devastation following the fall of Baghdad.',tacticAr:'بَيْبَرْسُ يَتَرَاجَعُ وَهْمًا وَقُطُزُ يُطْبِقُ الْكَمَّاشَةَ.',tacticEn:'Baybars feigned retreat, Qutuz closed the iron pincers.',figures:['سَيْفُ الدِّينِ قُطُزَ','رُكْنُ الدِّينِ بَيْبَرْسُ','كَتْبُغَا (قُتِلَ)'],figuresEn:["Sayf al-Din Qutuz (historic war cry!)", "Rukn al-Din Baybars", "Kitbuqa (Mongol commander, killed)"],narratorAr:'صَرَخَ قُطُزُ وَاإِسْلَامَاهْ وَأَلْقَى بِخُوذَتِهِ فَزَلْزَلَتْ أَرْكَانَ الْمَغُولِ.',narratorEn:'Qutuz cried "O Islam!" shattering the Mongol army.',resultsAr:'أَوَّلُ هَزِيمَةٍ حَاسِمَةٍ لِلْمَغُولِ.',resultsEn:'First decisive Mongol defeat in history.',lessons:['كَسْرُ أُسْطُورَةِ الِاتِّقَاءِ','الصَّرْخَةُ تُضَاعِفُ الطَّاقَةَ','الِاسْتِدْرَاجُ يَنْقُلِبُ الْمَوْقِفَ','مَعْرَكَةٌ تُنْقِذُ حَضَارَةً'],lessonsEn:["Shattering the myth of invincibility", "An inspiring battle cry multiplies energy", "Baiting reverses the battlefield situation", "One battle can save an entire civilization"]},
+{id:15,yearH:'٨٥٧ هـ',yearM:'1453 م',nameAr:'فَتْحُ الْقُسْطَنْطِينِيَّةِ',nameEn:'The Conquest of Constantinople',epoch:'857 AH · 1453 CE',location:'الْقُسْطَنْطِينِيَّةُ',color:'#064E3B',causesAr:'تَحْقِيقُ النُّبُوءَةِ النَّبَوِيَّةِ وَإِنْهَاءُ الإِمْبَرَاطُورِيَّةِ الْبِيزَنْطِيَّةِ.',causesEn:'Fulfillment of prophecy and ending the Byzantine Empire.',tacticAr:'مَدَافِعُ ضَخْمَةٌ وَنَقْلُ ٧٠ سَفِينَةً بَرًّا فَوْقَ التِّلَالِ.',tacticEn:'Massive cannons and transporting 70 warships overland.',figures:['مُحَمَّدٌ الْفَاتِحُ (٢١ عَامًا!)','قُسْطَنْطِينُ الحَادِي عَشَرَ (قُتِلَ)','أُرْبَانُ'],figuresEn:["Sultan Muhammad al-Fatih (age 21!)", "Emperor Constantine XI (killed)", "Urban the Hungarian (cannon maker)"],narratorAr:'عَبَرَتِ السُّفُنُ الصُّخُورَ فِي جَوْفِ اللَّيْلِ لِتَسْتَيْقِظَ الْقُسْطَنْطِينِيَّةُ عَلَى تَكْبِيرَاتِ الْفَاتِحِ.',narratorEn:'Ships traversed rocks at night — Constantinople awoke to the Takbir of Fatih.',resultsAr:'نِهَايَةُ الإِمْبَرَاطُورِيَّةِ الْبِيزَنْطِيَّةِ.',resultsEn:'End of the Byzantine Empire. Prophecy fulfilled.',lessons:['الِابْتِكَارُ يَكْسِرُ الْحُصُونَ','التَّخْطِيطُ الْعَبْقَرِيُّ يَتَجَاوَزُ','الإِيمَانُ يَزِيدُ الْعَزِيمَةَ','الشَّبَابُ يُحَقِّقُ الْمُسْتَحِيلَ'],lessonsEn:["Innovation breaks the strongest fortresses", "Brilliant planning overcomes every obstacle", "Belief in prophecy multiplies resolve", "Youth and confidence achieve the impossible"]}
+];
+function buildNav(){
+  const nav=document.getElementById('quickNav');
+  nav.innerHTML=BATTLES.map(b=>`<button class="qn-btn" onclick="scrollToCard(${b.id})" title="${b.nameEn}">${b.yearH} ${b.nameAr.split(' ').slice(0,2).join(' ')}</button>`).join('');
+}
+function scrollToCard(id){document.getElementById('bc-'+id)?.scrollIntoView({behavior:'smooth',block:'center'});}
+function buildCards(){
+  const list=document.getElementById('battlesList');
+  list.innerHTML=BATTLES.map(b=>`
+<div class="battle-card" id="bc-${b.id}" onclick="openModal(${b.id})">
+  <div class="card-stripe" style="background:${b.color}"></div>
+  <div class="card-minimap">${MM[b.id]||''}</div>
+  <div class="card-body">
+    <div class="card-num">BATTLE ${String(b.id).padStart(2,'0')} · ${b.epoch}</div>
+    <div class="card-name">${b.nameAr}</div>
+    <span class="card-name-en">${b.nameEn}</span>
+    <div class="card-tags">
+      <span class="card-tag">📅 ${b.yearH} · ${b.yearM}</span>
+      <span class="card-tag">📍 ${b.location}</span>
+    </div>
+    <div class="card-excerpt">${b.causesAr.substring(0,72)}...</div>
+  </div>
+  <div class="card-arr">←</div>
+  <button class="card-listen" onclick="event.stopPropagation();speakBattle(${b.id})">🎙 استمع</button>
+</div>`).join('');
+}
+function openModal(id){
+  const b=BATTLES.find(x=>x.id===id);if(!b)return;
+  const isEn = LANG==='en';
+  document.getElementById('mEpoch').textContent=b.epoch;
+  document.getElementById('mTitle').textContent=b.nameAr;
+  document.getElementById('mTitleEn').textContent=b.nameEn;
+  const figs = isEn ? (b.figuresEn||b.figures) : b.figures;
+  const lsns = isEn ? (b.lessonsEn||b.lessons) : b.lessons;
+  document.getElementById('mBody').innerHTML=`
+<button class="narr-btn" onclick="speakBattle(${b.id})">
+  <div class="narr-icon">${LANG==='en'?'🔊':'🎙️'}</div>
+  <div class="narr-txt">
+    <span class="nt-title">${isEn?'Listen to the Narrator':'اِسْتَمِعْ إِلَى صَوْتِ الرَّاوِي'}</span>
+    <span class="nt-sub">${isEn?'Reading English narration · '+currentSlot().labelEn:'قِرَاءَةُ النَّصِّ الْعَرَبِيِّ الْمُشَكَّلِ · '+currentSlot().labelAr}</span>
+  </div>
+  <div class="audio-wave" id="mWave-${b.id}"><span></span><span></span><span></span><span></span><span></span></div>
+</button>
+<div class="map-sec">
+  <div class="map-title-bar">🗺️ ${isEn?'Tactical Battlefield Map':'الْخَرِيطَةُ التَّكْتِيكِيَّةُ'}</div>
+  ${MF[b.id]||''}
+  <div class="map-legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#065F46"></div>${isEn?'Muslims':'الْمُسْلِمُونَ'}</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#9F1239"></div>${isEn?'Enemy':'الْعَدُوُّ'}</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#1E40AF"></div>${isEn?'Water':'مِيَاهٌ'}</div>
+    <div class="leg-item"><div class="leg-line" style="background:#D97706"></div>${isEn?'Movement':'حَرَكَةٌ'}</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#9FAF8A"></div>${isEn?'Terrain':'تَضَارِيسُ'}</div>
+  </div>
+</div>
+<div class="narr-quote">
+  <p class="nq-ar">${b.narratorAr}</p>
+  <p class="nq-en">${b.narratorEn}</p>
+</div>
+<div class="info-sec">
+  <div class="info-lbl">${isEn?'⚔️ Causes':'⚔️ الْأَسْبَابُ'} <span class="info-lbl-en">${isEn?'':'Causes'}</span></div>
+  <p class="info-ar">${b.causesAr}</p>
+  <p class="info-en">${b.causesEn}</p>
+</div>
+<div class="info-sec">
+  <div class="info-lbl">${isEn?'🧩 Tactics':'🧩 التَّكْتِيكُ'} <span class="info-lbl-en">${isEn?'':'Military Tactics'}</span></div>
+  <p class="info-ar">${b.tacticAr}</p>
+  <p class="info-en">${b.tacticEn}</p>
+</div>
+<div class="info-sec">
+  <div class="info-lbl">${isEn?'👤 Key Figures':'👤 الشَّخْصِيَّاتُ'} <span class="info-lbl-en">${isEn?'':'Key Figures'}</span></div>
+  <div class="fig-chips">${figs.map(f=>`<span class="fig-chip">${f}</span>`).join('')}</div>
+</div>
+<div class="info-sec">
+  <div class="info-lbl">${isEn?'🏆 Outcomes':'🏆 النَّتَائِجُ'} <span class="info-lbl-en">${isEn?'':'Outcomes'}</span></div>
+  <p class="info-ar">${b.resultsAr}</p>
+  <p class="info-en">${b.resultsEn}</p>
+</div>
+<div class="info-sec">
+  <div class="info-lbl">${isEn?'💡 Lessons Learned':'💡 الدُّرُوسُ وَالْعِبَرُ'} <span class="info-lbl-en">${isEn?'':'Lessons Learned'}</span></div>
+  <div class="lessons-grid">${lsns.map(l=>`<div class="lesson-item">✦ ${l}</div>`).join('')}</div>
+</div>
+<div class="modal-nav">
+  ${b.id>1?`<button class="modal-nav-btn" onclick="openModal(${b.id-1})">${isEn?'← Previous Battle':'→ الْمَعْرَكَةُ السَّابِقَةُ'}</button>`:''}
+  ${b.id<15?`<button class="modal-nav-btn" onclick="openModal(${b.id+1})">${isEn?'Next Battle →':'الْمَعْرَكَةُ التَّالِيَةُ ←'}</button>`:''}
+</div>`;
+  document.getElementById('modal-ov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){if(e.target===document.getElementById('modal-ov'))closeModalDirect();}
+function closeModalDirect(){document.getElementById('modal-ov').classList.remove('open');document.body.style.overflow='';stopSpeech();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalDirect();});
+
+/* ══════════════════════════════════════════════════════
+   RAWI ENGINE v4 — matches Sera / Four-Imams pattern
+   ▸ 5 voice personas (same slots as Seerah project)
+   ▸ Language picker (AR / EN) — shown on first visit,
+     persistent via localStorage, toggleable at any time
+   ▸ Narration reads ONLY the chosen language's text
+   ▸ Arabic normalization (هـ→هجرية, م→ميلادية, بن→ابن)
+   ▸ English normalization (AH→After Hijra, CE→Common Era)
+   ▸ Mobile-safe: all utterances queued in one gesture
+   ▸ Generation guard prevents overlapping narrations
+══════════════════════════════════════════════════════ */
+const LS = { lang:'atlas.lang', voice:'atlas.voice' };
+
+/* 5 personas — Arabic + English names match Sera project */
+const VOICE_SLOTS = [
+  {id:'classic', icon:'🎙️', labelAr:'حَامِد',     labelEn:'Guy',     descAr:'فَصِيحٌ كْلَاسِيكِيٌّ',  descEn:'Classic ♂',     rate:0.86, pitch:0.92},
+  {id:'gentle',  icon:'🌙', labelAr:'زَارِيَة',   labelEn:'Aria',    descAr:'صَوْتٌ هَادِئٌ',         descEn:'Gentle ♀',      rate:0.82, pitch:1.08},
+  {id:'story',   icon:'📖', labelAr:'سَلْمَى',    labelEn:'Jenny',   descAr:'حَكَوَاتِيَّةٌ',         descEn:'Storyteller ♀', rate:0.90, pitch:1.04},
+  {id:'warm',    icon:'☀️', labelAr:'عَبْدُاللهِ',labelEn:'Ryan',    descAr:'صَوْتٌ وُدِّيٌّ',        descEn:'Warm ♂',        rate:0.84, pitch:0.97},
+  {id:'shakir',  icon:'🕌', labelAr:'شَاكِر',     labelEn:'Brian',   descAr:'إِيقَاعٌ حَمَاسِيٌّ',   descEn:'Egyptian ♂',    rate:0.93, pitch:0.95}
+];
+
+let LANG      = localStorage.getItem(LS.lang)  || 'none'; // 'ar'|'en'|'none'
+let VOICE_ID  = localStorage.getItem(LS.voice) || 'classic';
+if (!VOICE_SLOTS.some(v=>v.id===VOICE_ID)) VOICE_ID='classic';
+let currentSlot = () => VOICE_SLOTS.find(v=>v.id===VOICE_ID) || VOICE_SLOTS[0];
+
+/* ── Language overlay (first-visit) ── */
+function showLangOverlay(){
+  const ov = document.getElementById('langOverlay');
+  if(ov) ov.classList.add('open');
+}
+function setNarrationLang(lang){
+  LANG = lang;
+  localStorage.setItem(LS.lang, lang);
+  // Update toggle buttons
+  document.getElementById('ltAr')?.classList.toggle('active', lang==='ar');
+  document.getElementById('ltEn')?.classList.toggle('active', lang==='en');
+  // Close overlay
+  const ov = document.getElementById('langOverlay');
+  if(ov) ov.classList.remove('open');
+  // Rebuild voice picker to show correct language names
+  buildVoicePicker();
+}
+
+/* ── Voice picker ── */
+function buildVoicePicker(){
+  const wrap = document.getElementById('voicePicker');
+  if(!wrap) return;
+  const isEn = LANG === 'en';
+  wrap.innerHTML = `<span class="vp-label">${isEn?'🎚️ Narrator:':'🎚️ صَوْتُ الرَّاوِي:'}</span>` +
+    VOICE_SLOTS.map(p=>`<button class="vp-chip${p.id===VOICE_ID?' active':''}" data-pid="${p.id}" onclick="selectVoice('${p.id}')">${p.icon} ${isEn?p.labelEn:p.labelAr}</button>`).join('');
+}
+function selectVoice(id){
+  if (!VOICE_SLOTS.some(v=>v.id===id)) return;
+  VOICE_ID = id;
+  localStorage.setItem(LS.voice, id);
+  document.querySelectorAll('.vp-chip').forEach(c=>c.classList.toggle('active', c.dataset.pid===id));
+}
+
+/* ── Voice engine ── */
+let ttsAvail=false, arVoice=null, enVoice=null, voiceDone=false, playGen=0, cW=null;
+
+function initTTS(){
+  if(!('speechSynthesis' in window)) return;
+  loadVoices();
+  if(window.speechSynthesis.onvoiceschanged!==undefined) window.speechSynthesis.onvoiceschanged=loadVoices;
+  let pc=0;
+  const pt=setInterval(()=>{ if(voiceDone||pc>30){clearInterval(pt);return;} loadVoices(); pc++; }, 200);
+}
+function loadVoices(){
+  if(!('speechSynthesis' in window)) return;
+  const v = window.speechSynthesis.getVoices();
+  if(v.length>0 && !voiceDone){
+    voiceDone = true; ttsAvail = true;
+    arVoice = v.find(x=>/^ar-(SA|EG)/i.test(x.lang)) || v.find(x=>/^ar/i.test(x.lang)) || null;
+    enVoice = v.find(x=>/^en-(US|GB)/i.test(x.lang)) || v.find(x=>/^en/i.test(x.lang)) || null;
+  }
+}
+function stopSpeech(){
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  if(cW) cW.classList.remove('playing');
+  cW = null;
+}
+
+/* ── Text normalisation ── */
+function normalizeAr(text){
+  if(!text) return text;
+  text = text.replace(/هـ/g, 'هجرية');
+  text = text.replace(/([0-9٠-٩])\s*م(?![ء-ي])/g, '$1 ميلادية');
+  text = text.replace(/(^|\s)(بْ?ن[َُِ]?)(?=\s)/g, '$1ا$2');
+  return text;
+}
+function normalizeEn(text){
+  if(!text) return text;
+  text = text.replace(/\bAH\b/g, 'After Hijra');
+  text = text.replace(/\bCE\b/g, 'Common Era');
+  text = text.replace(/\bBC\b/g, 'Before Christ');
+  return text;
+}
+function splitSentences(text){
+  return text.replace(/([،.!؟:؛?!])\s*/g,'$1|').split('|').map(s=>s.trim()).filter(Boolean);
+}
+
+/* ── Narration content builders ── */
+function battlePartsAr(b){
+  const p=[];
+  p.push(...splitSentences(normalizeAr(`مَعْرَكَةُ ${b.nameAr}، فِي عَامِ ${b.yearH}، الْمُوَافِقِ ${b.yearM}.`)));
+  p.push(...splitSentences(normalizeAr(b.narratorAr)));
+  p.push('الْأَسْبَابُ:');
+  p.push(...splitSentences(normalizeAr(b.causesAr)));
+  p.push('التَّكْتِيكُ الْعَسْكَرِيُّ:');
+  p.push(...splitSentences(normalizeAr(b.tacticAr)));
+  p.push('أَبْرَزُ الشَّخْصِيَّاتِ:');
+  p.push(...splitSentences(normalizeAr(b.figures.join('، ')+'.')));
+  p.push('النَّتَائِجُ:');
+  p.push(...splitSentences(normalizeAr(b.resultsAr)));
+  p.push('الدُّرُوسُ وَالْعِبَرُ:');
+  (b.lessons||[]).forEach(l=>p.push(...splitSentences(normalizeAr(l+'.'))));
+  return p.filter(Boolean);
+}
+function battlePartsEn(b){
+  const p=[];
+  p.push(...splitSentences(normalizeEn(`The Battle of ${b.nameEn}, in the year ${b.epoch}.`)));
+  p.push(...splitSentences(normalizeEn(b.narratorEn)));
+  p.push('Causes:');
+  p.push(...splitSentences(normalizeEn(b.causesEn)));
+  p.push('Military Tactics:');
+  p.push(...splitSentences(normalizeEn(b.tacticEn)));
+  p.push('Key Figures:');
+  p.push(...splitSentences(normalizeEn((b.figuresEn||b.figures).join(', ')+'.')));
+  p.push('Outcomes:');
+  p.push(...splitSentences(normalizeEn(b.resultsEn)));
+  p.push('Lessons Learned:');
+  (b.lessonsEn||[]).forEach(l=>p.push(...splitSentences(normalizeEn(l+'.'))));
+  return p.filter(Boolean);
+}
+
+/* ── Queue speech (mobile-safe: all in one gesture) ── */
+function queueSpeech(sentences, waveEl, lang){
+  if(!ttsAvail){ loadVoices(); if(!ttsAvail) return; }
+  stopSpeech();
+  playGen++; const mg=playGen;
+  cW = waveEl||null;
+  const isAr = (lang||LANG) === 'ar';
+  const voiceObj = isAr ? arVoice : enVoice;
+  const slot = currentSlot();
+  sentences.forEach((sentence,i)=>{
+    const u = new SpeechSynthesisUtterance(sentence);
+    u.lang  = isAr ? (voiceObj?voiceObj.lang:'ar-SA') : (voiceObj?voiceObj.lang:'en-US');
+    u.rate  = slot.rate;
+    u.pitch = slot.pitch;
+    if(voiceObj) u.voice = voiceObj;
+    u.onstart = ()=>{ if(mg!==playGen) return; waveEl?.classList.add('playing'); };
+    if(i===sentences.length-1){
+      u.onend  = ()=>{ if(mg!==playGen) return; waveEl?.classList.remove('playing'); if(cW===waveEl) cW=null; };
+    }
+    u.onerror = ()=>{ if(mg!==playGen) return; waveEl?.classList.remove('playing'); };
+    try{ window.speechSynthesis.speak(u); }catch(e){}
+  });
+}
+
+function speakIntro(){
+  const waveEl = document.getElementById('introWave');
+  const isAr = LANG!=='en';
+  const sentences = isAr ? [
+    'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ.',
+    'مَرْحَبًا بِكُمْ فِي أَطْلَسِ الْمَعَارِكِ الإِسْلَامِيَّةِ الْكُبْرَى.',
+    'إِنَّ دِرَاسَةَ هَذِهِ الْمَعَارِكِ لَيْسَتْ مُجَرَّدَ تَارِيخٍ يُحْفَظُ، بَلْ هِيَ مَدْرَسَةٌ فِي الْقِيَادَةِ وَالْحِكْمَةِ وَالِاسْتِرَاتِيجِيَّةِ.',
+    'مِنْ آبَارِ بَدْرٍ إِلَى أَسْوَارِ الْقُسْطَنْطِينِيَّةِ، صَاغَ الْمُسْلِمُونَ مَسَارَ الْحَضَارَةِ الإِنْسَانِيَّةِ عَبْرَ خَمْسَةَ عَشَرَ مَعْرَكَةً فَارِقَةً.',
+    'فَلْنَبْدَأْ هَذِهِ الرِّحْلَةَ مَعًا.'
+  ] : [
+    'In the name of God, the Most Gracious, the Most Merciful.',
+    'Welcome to the Great Islamic Battles Atlas.',
+    'Studying these battles is not mere history — it is a school of leadership, wisdom, and strategy.',
+    'From the wells of Badr to the walls of Constantinople, Muslims shaped the course of human civilization through fifteen decisive battles.',
+    'Let us begin this journey together.'
+  ];
+  queueSpeech(sentences, waveEl, isAr?'ar':'en');
+}
+function speakBattle(id){
+  const b = BATTLES.find(x=>x.id===id); if(!b) return;
+  const waveEl = document.getElementById(`mWave-${id}`);
+  const isAr = LANG!=='en';
+  queueSpeech(isAr ? battlePartsAr(b) : battlePartsEn(b), waveEl, isAr?'ar':'en');
+}
+
+/* ── Boot ── */
+initTTS();
+buildVoicePicker();
+buildNav();
+buildCards();
+// Show language overlay if not yet chosen
+if(LANG==='none') showLangOverlay();
+// Sync toggle buttons
+document.getElementById('ltAr')?.classList.toggle('active', LANG==='ar');
+document.getElementById('ltEn')?.classList.toggle('active', LANG==='en');
+</script>
+</body>
+</html>
