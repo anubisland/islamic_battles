@@ -376,7 +376,7 @@ const VOICE_SLOTS = [
 let LANG      = localStorage.getItem(LS.lang)  || 'none'; // 'ar'|'en'|'none'
 let VOICE_ID  = localStorage.getItem(LS.voice) || 'classic';
 if (!VOICE_SLOTS.some(v=>v.id===VOICE_ID)) VOICE_ID='classic';
-let currentSlot = () => VOICE_SLOTS.find(v=>v.id===VOICE_ID) || VOICE_SLOTS[0];
+let currentPersonaRate = () => (VOICE_SLOTS.find(v=>v.id===VOICE_ID)||VOICE_SLOTS[0]).rate;
 
 /* ── Language overlay (first-visit) ── */
 function showLangOverlay(){
@@ -401,8 +401,13 @@ function buildVoicePicker(){
   const wrap = document.getElementById('voicePicker');
   if(!wrap) return;
   const isEn = LANG === 'en';
+  const pool = isEn ? enVoices : arVoices;
   wrap.innerHTML = `<span class="vp-label">${isEn?'🎚️ Narrator:':'🎚️ صَوْتُ الرَّاوِي:'}</span>` +
-    VOICE_SLOTS.map(p=>`<button class="vp-chip${p.id===VOICE_ID?' active':''}" data-pid="${p.id}" onclick="selectVoice('${p.id}')">${p.icon} ${isEn?p.labelEn:p.labelAr}</button>`).join('');
+    VOICE_SLOTS.map((p,i)=>{
+      const v = pool[i % pool.length];
+      const vname = v ? ` <small style="opacity:.6;font-size:.6rem">(${v.name.replace(/Microsoft |Neural/gi,'').trim().substring(0,12)})</small>` : '';
+      return `<button class="vp-chip${p.id===VOICE_ID?' active':''}" data-pid="${p.id}" onclick="selectVoice('${p.id}')">${p.icon} ${isEn?p.labelEn:p.labelAr}${vname}</button>`;
+    }).join('');
 }
 function selectVoice(id){
   if (!VOICE_SLOTS.some(v=>v.id===id)) return;
@@ -412,7 +417,8 @@ function selectVoice(id){
 }
 
 /* ── Voice engine ── */
-let ttsAvail=false, arVoice=null, enVoice=null, voiceDone=false, playGen=0, cW=null;
+let ttsAvail=false, voiceDone=false, playGen=0, cW=null;
+let arVoices=[], enVoices=[];  // All available voices per language
 
 function initTTS(){
   if(!('speechSynthesis' in window)) return;
@@ -426,10 +432,32 @@ function loadVoices(){
   const v = window.speechSynthesis.getVoices();
   if(v.length>0 && !voiceDone){
     voiceDone = true; ttsAvail = true;
-    arVoice = v.find(x=>/^ar-(SA|EG)/i.test(x.lang)) || v.find(x=>/^ar/i.test(x.lang)) || null;
-    enVoice = v.find(x=>/^en-(US|GB)/i.test(x.lang)) || v.find(x=>/^en/i.test(x.lang)) || null;
+    // Collect ALL Arabic voices, prefer neural/natural ones first
+    arVoices = [
+      ...v.filter(x=>/neural/i.test(x.name) && /^ar/i.test(x.lang)),
+      ...v.filter(x=>!/neural/i.test(x.name) && /^ar-(SA|EG)/i.test(x.lang)),
+      ...v.filter(x=>!/neural/i.test(x.name) && /^ar/i.test(x.lang)),
+    ].filter((v,i,a)=>a.findIndex(x=>x.name===v.name)===i); // unique
+    // Collect ALL English voices
+    enVoices = [
+      ...v.filter(x=>/neural/i.test(x.name) && /^en/i.test(x.lang)),
+      ...v.filter(x=>!/neural/i.test(x.name) && /^en-(US|GB)/i.test(x.lang)),
+      ...v.filter(x=>!/neural/i.test(x.name) && /^en/i.test(x.lang)),
+    ].filter((v,i,a)=>a.findIndex(x=>x.name===v.name)===i);
+    // Rebuild picker once voices are ready (shows voice names)
+    buildVoicePicker();
   }
 }
+// Get the voice object for a given persona slot and language
+function getVoiceForSlot(slotIndex, isAr){
+  const pool = isAr ? arVoices : enVoices;
+  if(!pool.length) return null;
+  // Distribute slots across available voices (round-robin if fewer voices than slots)
+  return pool[slotIndex % pool.length];
+}
+// Get current slot index and slot object
+function currentSlotIndex(){ return Math.max(0, VOICE_SLOTS.findIndex(v=>v.id===VOICE_ID)); }
+function currentSlot(){ return VOICE_SLOTS[currentSlotIndex()]; }
 function stopSpeech(){
   if('speechSynthesis' in window) window.speechSynthesis.cancel();
   if(cW) cW.classList.remove('playing');
@@ -496,11 +524,12 @@ function queueSpeech(sentences, waveEl, lang){
   playGen++; const mg=playGen;
   cW = waveEl||null;
   const isAr = (lang||LANG) === 'ar';
-  const voiceObj = isAr ? arVoice : enVoice;
+  const slotIdx = currentSlotIndex();
   const slot = currentSlot();
+  const voiceObj = getVoiceForSlot(slotIdx, isAr);
   sentences.forEach((sentence,i)=>{
     const u = new SpeechSynthesisUtterance(sentence);
-    u.lang  = isAr ? (voiceObj?voiceObj.lang:'ar-SA') : (voiceObj?voiceObj.lang:'en-US');
+    u.lang  = voiceObj ? voiceObj.lang : (isAr ? 'ar-SA' : 'en-US');
     u.rate  = slot.rate;
     u.pitch = slot.pitch;
     if(voiceObj) u.voice = voiceObj;
