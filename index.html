@@ -542,9 +542,68 @@ function queueSpeech(sentences, waveEl, lang){
   });
 }
 
-function speakIntro(){
+/* ── MP3 player (used when audio files exist) ── */
+let currentAudio = null;
+const BASE_AUDIO = 'audio/';
+
+function mp3Path(slot, lang, file){
+  return `${BASE_AUDIO}${slot}/${lang}/${file}.mp3`;
+}
+
+function playMP3Sequence(files, slot, lang, waveEl){
+  stopSpeech();
+  playGen++; const mg = playGen;
+  cW = waveEl || null;
+  let idx = 0;
+
+  function playNext(){
+    if(mg !== playGen) return;
+    if(idx >= files.length){
+      waveEl?.classList.remove('playing');
+      if(cW === waveEl) cW = null;
+      return;
+    }
+    const path = mp3Path(slot, lang, files[idx++]);
+    const audio = new Audio(path);
+    currentAudio = audio;
+    audio.onplay  = ()=>{ if(mg!==playGen) return; waveEl?.classList.add('playing'); };
+    audio.onended = ()=>{ if(mg!==playGen) return; playNext(); };
+    audio.onerror = ()=>{
+      // MP3 not found — fall back to speechSynthesis for remaining
+      if(mg!==playGen) return;
+      waveEl?.classList.remove('playing');
+    };
+    audio.play().catch(()=>{ waveEl?.classList.remove('playing'); });
+  }
+  playNext();
+}
+
+/* Check if MP3 files exist for current slot */
+async function hasMP3(slot, lang){
+  try{
+    const r = await fetch(mp3Path(slot, lang, 'intro_0'), {method:'HEAD'});
+    return r.ok;
+  }catch(e){ return false; }
+}
+
+function stopSpeech(){
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  if(currentAudio){ currentAudio.pause(); currentAudio = null; }
+  if(cW) cW.classList.remove('playing');
+  cW = null;
+}
+
+async function speakIntro(){
   const waveEl = document.getElementById('introWave');
   const isAr = LANG!=='en';
+  const lang = isAr ? 'ar' : 'en';
+  const slot = VOICE_ID;
+  // Try MP3 first
+  if(await hasMP3(slot, lang)){
+    playMP3Sequence([0,1,2,3,4].map(i=>`intro_${i}`), slot, lang, waveEl);
+    return;
+  }
+  // Fallback: speechSynthesis
   const sentences = isAr ? [
     'بِسْمِ اللهِ الرَّحْمَنِ الرَّحِيمِ.',
     'مَرْحَبًا بِكُمْ فِي أَطْلَسِ الْمَعَارِكِ الإِسْلَامِيَّةِ الْكُبْرَى.',
@@ -558,13 +617,21 @@ function speakIntro(){
     'From the wells of Badr to the walls of Constantinople, Muslims shaped the course of human civilization through fifteen decisive battles.',
     'Let us begin this journey together.'
   ];
-  queueSpeech(sentences, waveEl, isAr?'ar':'en');
+  queueSpeech(sentences, waveEl, lang);
 }
-function speakBattle(id){
+async function speakBattle(id){
   const b = BATTLES.find(x=>x.id===id); if(!b) return;
   const waveEl = document.getElementById(`mWave-${id}`);
   const isAr = LANG!=='en';
-  queueSpeech(isAr ? battlePartsAr(b) : battlePartsEn(b), waveEl, isAr?'ar':'en');
+  const lang = isAr ? 'ar' : 'en';
+  const slot = VOICE_ID;
+  // Try MP3 first
+  if(await hasMP3(slot, lang)){
+    playMP3Sequence([`battle_${id}`], slot, lang, waveEl);
+    return;
+  }
+  // Fallback: full speechSynthesis narration
+  queueSpeech(isAr ? battlePartsAr(b) : battlePartsEn(b), waveEl, lang);
 }
 
 /* ── Boot ── */
