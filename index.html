@@ -625,6 +625,13 @@ async function speakBattle(id){
   const waveEl = document.getElementById(`mWave-${id}`);
   const isAr = LANG!=='en';
   const lang = isAr ? 'ar' : 'en';
+  const slot = VOICE_ID;
+  if(slot==='story'){
+    try{
+      const r = await fetch(mp3Path(slot, lang, `battle_${id}`), {method:'HEAD'});
+      if(r.ok){ playMP3Sequence([`battle_${id}`], slot, lang, waveEl); return; }
+    }catch(e){}
+  }
   queueSpeech(isAr ? battlePartsAr(b) : battlePartsEn(b), waveEl, lang);
 }
 
