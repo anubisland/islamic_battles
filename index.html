@@ -625,13 +625,6 @@ async function speakBattle(id){
   const waveEl = document.getElementById(`mWave-${id}`);
   const isAr = LANG!=='en';
   const lang = isAr ? 'ar' : 'en';
-  const slot = VOICE_ID;
-  // Try MP3 first
-  if(await hasMP3(slot, lang)){
-    playMP3Sequence([`battle_${id}`], slot, lang, waveEl);
-    return;
-  }
-  // Fallback: full speechSynthesis narration
   queueSpeech(isAr ? battlePartsAr(b) : battlePartsEn(b), waveEl, lang);
 }
 
