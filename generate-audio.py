@@ -1,8 +1,14 @@
 import asyncio, os, sys
 import edge_tts
 
-VOICES = { 'ar': 'ar-SA-ZariyahNeural', 'en': 'en-US-JennyNeural' }
-SLOT = 'story'
+VOICES = {
+  'classic': { 'ar': 'ar-SA-HamedNeural',    'en': 'en-US-GuyNeural' },     # حامد / Guy
+  'gentle':  { 'ar': 'ar-SA-ZariyahNeural',  'en': 'en-US-AriaNeural' },    # زارية / Aria
+  'story':   { 'ar': 'ar-EG-SalmaNeural',    'en': 'en-US-JennyNeural' },   # سلمى / Jenny
+  'warm':    { 'ar': 'ar-OM-AbdullahNeural', 'en': 'en-GB-RyanNeural' },    # عبدالله / Ryan
+  'shakir':  { 'ar': 'ar-EG-ShakirNeural',   'en': 'en-US-BrianNeural' },   # شاكر / Brian
+}
+SLOT = sys.argv[1] if len(sys.argv)>1 else 'story'
 
 BATTLES = [
   {
@@ -290,7 +296,8 @@ async def generate(slot, lang, voice, filename, text):
 
 
 async def main():
-  print("Generated audio files will be placed in audio/story/...\n")
+  voice_set = VOICES[SLOT]
+  print(f"Generating for slot '{SLOT}' — Arabic: {voice_set['ar']}, English: {voice_set['en']}\n")
   for b in BATTLES:
     bid = b["id"]
     print(f"Battle {bid}/{len(BATTLES)}: {b['nameAr']}")
@@ -298,8 +305,8 @@ async def main():
     text_ar = make_text_ar(b)
     text_en = make_text_en(b)
 
-    await generate(SLOT, "ar", VOICES["ar"], f"battle_{bid}.mp3", text_ar)
-    await generate(SLOT, "en", VOICES["en"], f"battle_{bid}.mp3", text_en)
+    await generate(SLOT, "ar", voice_set["ar"], f"battle_{bid}.mp3", text_ar)
+    await generate(SLOT, "en", voice_set["en"], f"battle_{bid}.mp3", text_en)
     print()
 
   # Generate intro files
@@ -322,16 +329,9 @@ async def main():
   os.makedirs(f"audio/{SLOT}/ar", exist_ok=True)
   os.makedirs(f"audio/{SLOT}/en", exist_ok=True)
 
-  # Combine intro into full text for each language
-  full_intro_ar = " ".join(intro_ar)
-  full_intro_en = " ".join(intro_en)
-
-  await generate(SLOT, "ar", VOICES["ar"], f"intro_full.mp3", full_intro_ar)
-  await generate(SLOT, "en", VOICES["en"], f"intro_full.mp3", full_intro_en)
-
   for i, (sent_ar, sent_en) in enumerate(zip(intro_ar, intro_en)):
-    await generate(SLOT, "ar", VOICES["ar"], f"intro_{i}.mp3", sent_ar)
-    await generate(SLOT, "en", VOICES["en"], f"intro_{i}.mp3", sent_en)
+    await generate(SLOT, "ar", voice_set["ar"], f"intro_{i}.mp3", sent_ar)
+    await generate(SLOT, "en", voice_set["en"], f"intro_{i}.mp3", sent_en)
 
   print("\nAll done!")
 
