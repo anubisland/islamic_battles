@@ -292,7 +292,7 @@ function openModal(id){
   document.getElementById('mTitle').textContent=b.nameAr;
   document.getElementById('mTitleEn').textContent=b.nameEn;
   const figs = isEn ? (b.figuresEn||b.figures) : b.figures;
-  const lsns = isEn ? (b.lessonsEn||b.lessons) : b.lessons;
+
   document.getElementById('mBody').innerHTML=`
 <button class="narr-btn" onclick="speakBattle(${b.id})">
   <div class="narr-icon">${LANG==='en'?'🔊':'🎙️'}</div>
@@ -338,7 +338,8 @@ function openModal(id){
 </div>
 <div class="info-sec">
   <div class="info-lbl">${isEn?'💡 Lessons Learned':'💡 الدُّرُوسُ وَالْعِبَرُ'} <span class="info-lbl-en">${isEn?'':'Lessons Learned'}</span></div>
-  <div class="lessons-grid">${lsns.map(l=>`<div class="lesson-item">✦ ${l}</div>`).join('')}</div>
+  <div class="lessons-grid">${b.lessons.map(l=>`<div class="lesson-item">✦ ${l}</div>`).join('')}</div>
+  <div style="margin-top:.5rem;border-top:1px solid var(--parch-3);padding-top:.5rem;display:grid;grid-template-columns:1fr 1fr;gap:8px">${b.lessonsEn.map(l=>`<div style="font-family:'Lora',serif;font-style:italic;direction:ltr;text-align:left;color:var(--muted);font-size:.85rem;line-height:1.65">✦ ${l}</div>`).join('')}</div>
 </div>
 <div class="modal-nav">
   ${b.id>1?`<button class="modal-nav-btn" onclick="openModal(${b.id-1})">${isEn?'← Previous Battle':'→ الْمَعْرَكَةُ السَّابِقَةُ'}</button>`:''}
