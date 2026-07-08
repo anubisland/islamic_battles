@@ -291,7 +291,6 @@ function openModal(id){
   document.getElementById('mEpoch').textContent=b.epoch;
   document.getElementById('mTitle').textContent=b.nameAr;
   document.getElementById('mTitleEn').textContent=b.nameEn;
-  const figs = isEn ? (b.figuresEn||b.figures) : b.figures;
 
   document.getElementById('mBody').innerHTML=`
 <button class="narr-btn" onclick="speakBattle(${b.id})">
@@ -329,7 +328,8 @@ function openModal(id){
 </div>
 <div class="info-sec">
   <div class="info-lbl">${isEn?'👤 Key Figures':'👤 الشَّخْصِيَّاتُ'} <span class="info-lbl-en">${isEn?'':'Key Figures'}</span></div>
-  <div class="fig-chips">${figs.map(f=>`<span class="fig-chip">${f}</span>`).join('')}</div>
+  <div class="fig-chips">${b.figures.map(f=>`<span class="fig-chip">${f}</span>`).join('')}</div>
+  <div style="margin-top:.5rem;border-top:1px solid var(--parch-3);padding-top:.5rem;display:flex;flex-wrap:wrap;gap:6px">${b.figuresEn.map(f=>`<span style="font-family:'Lora',serif;font-style:italic;direction:ltr;text-align:left;color:var(--muted);font-size:.82rem;line-height:1.6;background:transparent;border:1px solid var(--parch-3);padding:.25em .9em;border-radius:999px">${f}</span>`).join('')}</div>
 </div>
 <div class="info-sec">
   <div class="info-lbl">${isEn?'🏆 Outcomes':'🏆 النَّتَائِجُ'} <span class="info-lbl-en">${isEn?'':'Outcomes'}</span></div>
